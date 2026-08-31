@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="theme-color" content="#6342D2">
+<title>CEBUQ Business Directory | Essential Services</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CEBUQ">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18395931672"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18395931672');
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<style>
+  body { margin:0; background:#fff; font-family:'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#6342D2; text-decoration:none; }
+  a:hover { color:#4D33A4; }
+  .leaflet-container { font-family:'Helvetica Neue', Arial, sans-serif; }
+  .cq-tiles { filter: brightness(1.03); }
+  [data-r="burger"], [data-r="tabbar"] { display:none; }
+  [data-r="pillrow"]::-webkit-scrollbar, [data-r="regionrow"]::-webkit-scrollbar { display:none; }
+  @media (max-width: 820px) { [data-r="lang"] { display:none !important; } }
+  @media (max-width: 700px) {
+    [data-r="header"] { flex-wrap:nowrap !important; }
+    [data-r="nav"] { display:none !important; }
+    [data-r="lang"] { display:none !important; }
+    [data-r="burger"] { display:flex !important; }
+    [data-r="cards"] { flex-direction:column !important; padding:20px !important; }
+    [data-r="h1"] { font-size:26px !important; }
+    [data-r="map"] { height:300px !important; }
+    [data-r="contacts"] { flex-wrap:wrap !important; justify-content:flex-start !important; gap:12px 18px !important; }
+    [data-r="footer"] { flex-direction:column !important; align-items:center !important; text-align:center !important; }
+    [data-r="footer"] > div { text-align:center !important; }
+    [data-r="tabbar"] { display:flex !important; }
+    [data-r="page"] { padding-bottom:calc(62px + env(safe-area-inset-bottom)) !important; }
+    [data-r="menu"] { grid-template-columns:1fr !important; grid-template-rows:none !important; grid-auto-flow:row !important; width:262px !important; max-height:60vh !important; overflow-y:auto !important; }
+    [data-r="menucols"] { grid-template-columns:1fr !important; grid-template-rows:none !important; grid-auto-flow:row !important; border-right:none !important; }
+    [data-r="regionrow"] { flex-wrap:nowrap !important; justify-content:flex-start !important; overflow-x:auto !important; padding:14px 16px !important; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    [data-r="regionrow"]::-webkit-scrollbar { display:none; }
+    [data-r="regionrow"] > span { flex:0 0 auto !important; white-space:nowrap !important; }
+    [data-r="pillrow"] { -webkit-overflow-scrolling:touch; }
+  }
+</style>
+</helmet>
+<div data-r="page" style="background:#fff;color:#1a1a1a;font-family:'Helvetica Neue', Arial, sans-serif;">
+  <svg width="0" height="0" style="position:absolute;" aria-hidden="true"><defs>
+    <linearGradient id="cq" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8FC7EE"></stop>
+      <stop offset="18%" stop-color="#9BF3DE"></stop>
+      <stop offset="38%" stop-color="#CBF08C"></stop>
+      <stop offset="55%" stop-color="#F6E14B"></stop>
+      <stop offset="74%" stop-color="#D8BC9B"></stop>
+      <stop offset="100%" stop-color="#B6A0F7"></stop>
+    </linearGradient>
+  </defs></svg>
+
+  <div style="position:sticky;top:0;z-index:1200;background:#fff;">
+    <div style="display:none;background:#FCD116;">
+      <div style="max-width:1000px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <span style="font-size:17px;font-weight:500;">Cebu Business Directory</span>
+        <a href="unlock.html" style="font-size:13px;font-weight:500;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:6px;padding:10px 20px;">Add your business</a>
+      </div>
+    </div>
+    <div style="border-bottom:1px solid #eee;">
+      <div data-r="header" style="position:relative;max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:26px;">
+        <a href="index.html" style="display:inline-flex;flex-shrink:0;"><img src="assets/cebuq-logo.png" alt="CEBUQ" style="height:41px;display:block;"></a>
+        <nav data-r="nav" style="display:flex;align-items:center;gap:22px;font-size:15px;margin-left:auto;flex-shrink:0;">
+          <span onMouseEnter="{{ onMenuOpen }}" onMouseLeave="{{ onMenuClose }}" style="padding-bottom:14px;margin-bottom:-14px;">
+            <a href="directory.html" style="color:#1a1a1a;font-weight:700;">Directory ▾</a>
+            <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+              <span data-r="menu" style="position:absolute;top:100%;right:24px;display:grid;grid-template-columns:460px 270px;width:760px;max-width:calc(100vw - 32px);background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:10px;z-index:10;">
+                <span data-r="menucols" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10, auto);grid-auto-flow:column;border-right:1px solid #F0F0F2;padding-right:8px;">
+                  <sc-for list="{{ categories }}" as="c" hint-placeholder-count="20">
+                    <a href="{{ c.href }}" onMouseEnter="{{ c.onHover }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;font-size:14px;font-weight:{{ c.weight }};color:{{ c.color }};background:{{ c.bg }};border-radius:6px;white-space:nowrap;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
+                  </sc-for>
+                </span>
+                <span style="display:flex;flex-direction:column;padding:2px 4px 2px 14px;">
+                  <span style="padding:5px 8px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#B9B9C2;">{{ menuCatLabel }}</span>
+                  <sc-for list="{{ menuSubs }}" as="s" hint-placeholder-count="5">
+                    <a href="{{ s.href }}" style="padding:7px 10px;font-size:14px;color:{{ s.color }};border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">{{ s.label }}</a>
+                  </sc-for>
+                </span>
+              </span>
+            </sc-if>
+          </span>
+          <a href="guide.html" style="color:#1a1a1a;">Guide</a>
+          <a href="travel.html" style="color:#1a1a1a;">Travel</a>
+          <a href="business.html" style="color:#1a1a1a;">Business</a>
+        </nav>
+        <span data-r="lang" onMouseEnter="{{ onLangOpen }}" onMouseLeave="{{ onLangClose }}" style="position:relative;margin-left:auto;display:inline-flex;align-items:center;white-space:nowrap;font-size:14px;padding-bottom:14px;margin-bottom:-14px;">
+          <span style="cursor:pointer;color:#1a1a1a;font-weight:700;">EN <span style="font-weight:400;">▾</span></span>
+          <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:100%;right:0;display:flex;flex-direction:column;min-width:150px;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:6px;z-index:20;">
+              <span style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;font-weight:700;color:#6342D2;border-radius:6px;background:#F7F7F7;">English<span style="font-size:12px;">EN</span></span>
+              <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Русский<span style="font-size:12px;">RU</span></span>
+              <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Deutsch<span style="font-size:12px;">DE</span></span>
+              <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Français<span style="font-size:12px;">FR</span></span>
+              <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Italiano<span style="font-size:12px;">IT</span></span>
+            </span>
+          </sc-if>
+        </span>
+        <span data-r="burger" onClick="{{ onBurger }}" style="margin-left:auto;position:relative;width:46px;height:46px;align-items:center;justify-content:center;cursor:pointer;color:#6342D2;">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true" style="display:block;">
+            <rect x="2" y="2" width="5" height="5" rx="1"></rect><rect x="10.5" y="2" width="5" height="5" rx="1"></rect><rect x="19" y="2" width="5" height="5" rx="1"></rect>
+            <rect x="2" y="10.5" width="5" height="5" rx="1"></rect><rect x="10.5" y="10.5" width="5" height="5" rx="1"></rect><rect x="19" y="10.5" width="5" height="5" rx="1"></rect>
+            <rect x="2" y="19" width="5" height="5" rx="1"></rect><rect x="10.5" y="19" width="5" height="5" rx="1"></rect><rect x="19" y="19" width="5" height="5" rx="1"></rect>
+          </svg>
+          <sc-if value="{{ burgerOpen }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:calc(100% + 10px);right:0;display:flex;flex-direction:column;width:262px;max-height:70vh;overflow-y:auto;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.16);padding:8px;z-index:1400;">
+              <sc-for list="{{ categories }}" as="c" hint-placeholder-count="20">
+                <a href="{{ c.href }}" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
+              </sc-for>
+              <span style="height:1px;background:#eee;margin:6px 8px;"></span>
+              <a href="directory.html" style="padding:9px 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">All categories</a>
+              <span style="padding:9px 12px;font-size:15px;"><strong style="font-weight:700;color:#1a1a1a;">EN</strong> <span style="color:#C9C6BE;">· RU · DE · FR · IT</span></span>
+              <a href="guide.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Guide</a>
+              <a href="travel.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Travel</a>
+              <a href="business.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Business</a>
+            </span>
+          </sc-if>
+        </span>
+      </div>
+    </div>
+    <div data-r="regions" style="background:#ECECEC;">
+      <div data-r="regionrow" style="max-width:1000px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-size:14px;">
+        <sc-for list="{{ areas }}" as="a" hint-placeholder-count="6">
+          <span style="display:flex;align-items:center;gap:14px;">
+            <sc-if value="{{ a.sep }}" hint-placeholder-val="{{ true }}"><span style="color:#8B8B8B;">·</span></sc-if>
+            <span onClick="{{ a.onClick }}" style="cursor:pointer;color:#1a1a1a;font-weight:{{ a.weight }};text-decoration:{{ a.underline }};" style-hover="text-decoration:underline;">{{ a.label }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1000px;margin:0 auto;">
+    <div style="padding:20px 24px 8px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <h1 data-r="h1" style="margin:0;font-size:32px;font-weight:800;letter-spacing:-0.01em;">Essential Services</h1>
+        <sc-if value="{{ hasSeo }}" hint-placeholder-val="{{ false }}">
+          <span onClick="{{ onSeoToggle }}" title="About this category" style="cursor:pointer;font-size:15px;line-height:1;padding:6px 8px;border-radius:6px;color:{{ seoArrowColor }};transform:{{ seoArrowTransform }};transition:transform .15s;" style-hover="background:#F2F2F5;">▾</span>
+        </sc-if>
+      </div>
+      <sc-if value="{{ seoOpen }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:14px 0 0;max-width:760px;font-size:14px;line-height:1.6;color:#6B6B7A;text-wrap:pretty;">{{ seoText }}</p>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;align-items:center;padding:12px 24px 0;">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+        <svg viewBox="0 0 490 490" width="18" height="18" aria-hidden="true"><path d="M200.9 120.6 L219.1 34.6 L270.9 34.6 L289.1 120.6 A132 132 0 0 1 301.8 125.8 L375.4 77.9 L412.1 114.6 L364.2 188.2 A132 132 0 0 1 369.4 200.9 L455.4 219.1 L455.4 270.9 L369.4 289.1 A132 132 0 0 1 364.2 301.8 L412.1 375.4 L375.4 412.1 L301.8 364.2 A132 132 0 0 1 289.1 369.4 L270.9 455.4 L219.1 455.4 L200.9 369.4 A132 132 0 0 1 188.2 364.2 L114.6 412.1 L77.9 375.4 L125.8 301.8 A132 132 0 0 1 120.6 289.1 L34.6 270.9 L34.6 219.1 L120.6 200.9 A132 132 0 0 1 125.8 188.2 L77.9 114.6 L114.6 77.9 L188.2 125.8 Z" fill="none" stroke="url(#cq)" stroke-width="30" stroke-linejoin="round"></path></svg>
+        <span style="font-size:14px;color:#B29DFB;">Verified only</span>
+        <input type="checkbox" checked="{{ verifiedOnly }}" onChange="{{ onVerified }}" style="width:16px;height:16px;accent-color:#1a1a1a;cursor:pointer;">
+      </label>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:16px 24px;">
+      <span onClick="{{ allPill.onClick }}" style="flex:0 0 auto;display:inline-flex;align-items:center;cursor:pointer;padding:8px 16px;border-radius:20px;font-size:14px;border:1.5px solid {{ allPill.border }};background:{{ allPill.bg }};color:{{ allPill.color }};">All
+        <span style="font-size:12px;line-height:1.5;margin-left:7px;padding:1px 7px;border-radius:10px;background:{{ allPill.countBg }};color:{{ allPill.countColor }};">{{ allPill.count }}</span>
+      </span>
+      <span data-r="pillrow" style="flex:1 1 0;display:flex;flex-wrap:nowrap;align-items:center;gap:10px;min-width:0;overflow-x:auto;scrollbar-width:none;">
+        <sc-for list="{{ pills }}" as="p" hint-placeholder-count="6">
+          <span onClick="{{ p.onClick }}" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;cursor:pointer;padding:8px 16px;border-radius:20px;font-size:14px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }};white-space:nowrap;">
+            {{ p.label }}
+            <span style="font-size:12px;line-height:1.5;padding:1px 7px;border-radius:10px;background:{{ p.countBg }};color:{{ p.countColor }};">{{ p.count }}</span>
+          </span>
+        </sc-for>
+      </span>
+    </div>
+
+  </div>
+
+  <div style="background:#FCFCFD;">
+  <div style="max-width:1000px;margin:0 auto;">
+    <script type="application/ld+json">{{ structuredData }}</script>
+    <div style="padding:20px 20px 0;">
+      <h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em;color:#1a1a1a;">{{ featuredTitle }}</h2>
+    </div>
+    <div data-r="cards" style="display:flex;align-items:flex-start;gap:20px;padding:20px;">
+      <span style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:20px;">
+        <sc-for list="{{ cardsL }}" as="b" hint-placeholder-count="10">
+        <div key="{{ b.key }}" data-r="card" style="border:{{ b.border }};border-radius:12px;overflow:hidden;background:#fff;">
+          <sc-if value="{{ b.hasPhoto }}" hint-placeholder-val="{{ false }}">
+            {{ b.photoEl }}
+          </sc-if>
+          <div style="padding:15px;">
+            <div onClick="{{ b.onHead }}" style="cursor:{{ b.headCursor }};">
+              <div style="font-size:16px;font-weight:700;color:{{ b.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ b.nameEl }}</div>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 490 490" width="18" height="18" style="flex-shrink:0;" aria-hidden="true"><path d="M200.9 120.6 L219.1 34.6 L270.9 34.6 L289.1 120.6 A132 132 0 0 1 301.8 125.8 L375.4 77.9 L412.1 114.6 L364.2 188.2 A132 132 0 0 1 369.4 200.9 L455.4 219.1 L455.4 270.9 L369.4 289.1 A132 132 0 0 1 364.2 301.8 L412.1 375.4 L375.4 412.1 L301.8 364.2 A132 132 0 0 1 289.1 369.4 L270.9 455.4 L219.1 455.4 L200.9 369.4 A132 132 0 0 1 188.2 364.2 L114.6 412.1 L77.9 375.4 L125.8 301.8 A132 132 0 0 1 120.6 289.1 L34.6 270.9 L34.6 219.1 L120.6 200.9 A132 132 0 0 1 125.8 188.2 L77.9 114.6 L114.6 77.9 L188.2 125.8 Z" fill="none" stroke="{{ b.iconStroke }}" stroke-width="30" stroke-linejoin="round"></path></svg>
+                <span style="font-size:13px;color:{{ b.badgeColor }};">{{ b.badge }}</span>
+                <sc-if value="{{ b.isFree }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span style="width:1px;height:13px;background:#D2CEC5;display:inline-block;"></span>
+                    <a href="unlock.html" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
+                  </span>
+                </sc-if>
+              </div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px;font-size:14px;min-width:0;">
+                <span style="color:#8B8B9A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ b.meta }}</span>
+                <span style="white-space:nowrap;">{{ b.ratingEl }}</span>
+              </div>
+              <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;">
+                <span>{{ b.areaEl }}</span>
+                <span onClick="{{ b.onToggle }}" style="cursor:{{ b.toggleCursor }};">{{ b.toggleEl }}</span>
+              </div>
+            </div>
+            <div style="display:{{ b.panelDisplay }};margin-top:12px;padding-top:12px;border-top:1px solid #eee;">
+              <div>
+                <sc-if value="{{ b.isBusiness }}" hint-placeholder-val="{{ false }}">
+                  <div data-r="contacts" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;">
+                    <sc-for list="{{ b.contacts }}" as="c" hint-placeholder-count="6">
+                      <a href="{{ c.href }}" style="font-size:13px;font-weight:600;color:{{ c.color }};cursor:{{ c.cursor }};" style-hover="color:{{ c.hoverColor }};">{{ c.label }}</a>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <div style="display:flex;align-items:flex-start;gap:14px;">
+                  {{ b.logoEl }}
+                  <p style="margin:0;font-size:13px;line-height:1.55;color:#6B6B7A;text-wrap:pretty;">{{ b.desc }}</p>
+                </div>
+                <sc-if value="{{ b.hasPrices }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px;">
+                    <p style="margin:0;font-size:13px;line-height:1.55;color:#1a1a1a;text-wrap:pretty;">{{ b.prices }}</p>
+                    <sc-if value="{{ b.hasChecked }}" hint-placeholder-val="{{ false }}">
+                      <p style="margin:4px 0 0;font-size:12px;color:#C9C6BE;text-align:right;">{{ b.checked }}</p>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      </span>
+      <span style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:20px;">
+        <sc-for list="{{ cardsR }}" as="b" hint-placeholder-count="10">
+        <div key="{{ b.key }}" data-r="card" style="border:{{ b.border }};border-radius:12px;overflow:hidden;background:#fff;">
+          <sc-if value="{{ b.hasPhoto }}" hint-placeholder-val="{{ false }}">
+            {{ b.photoEl }}
+          </sc-if>
+          <div style="padding:15px;">
+            <div onClick="{{ b.onHead }}" style="cursor:{{ b.headCursor }};">
+              <div style="font-size:16px;font-weight:700;color:{{ b.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ b.nameEl }}</div>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 490 490" width="18" height="18" style="flex-shrink:0;" aria-hidden="true"><path d="M200.9 120.6 L219.1 34.6 L270.9 34.6 L289.1 120.6 A132 132 0 0 1 301.8 125.8 L375.4 77.9 L412.1 114.6 L364.2 188.2 A132 132 0 0 1 369.4 200.9 L455.4 219.1 L455.4 270.9 L369.4 289.1 A132 132 0 0 1 364.2 301.8 L412.1 375.4 L375.4 412.1 L301.8 364.2 A132 132 0 0 1 289.1 369.4 L270.9 455.4 L219.1 455.4 L200.9 369.4 A132 132 0 0 1 188.2 364.2 L114.6 412.1 L77.9 375.4 L125.8 301.8 A132 132 0 0 1 120.6 289.1 L34.6 270.9 L34.6 219.1 L120.6 200.9 A132 132 0 0 1 125.8 188.2 L77.9 114.6 L114.6 77.9 L188.2 125.8 Z" fill="none" stroke="{{ b.iconStroke }}" stroke-width="30" stroke-linejoin="round"></path></svg>
+                <span style="font-size:13px;color:{{ b.badgeColor }};">{{ b.badge }}</span>
+                <sc-if value="{{ b.isFree }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span style="width:1px;height:13px;background:#D2CEC5;display:inline-block;"></span>
+                    <a href="unlock.html" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
+                  </span>
+                </sc-if>
+              </div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:8px;font-size:14px;min-width:0;">
+                <span style="color:#8B8B9A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ b.meta }}</span>
+                <span style="white-space:nowrap;">{{ b.ratingEl }}</span>
+              </div>
+              <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;">
+                <span>{{ b.areaEl }}</span>
+                <span onClick="{{ b.onToggle }}" style="cursor:{{ b.toggleCursor }};">{{ b.toggleEl }}</span>
+              </div>
+            </div>
+            <div style="display:{{ b.panelDisplay }};margin-top:12px;padding-top:12px;border-top:1px solid #eee;">
+              <div>
+                <sc-if value="{{ b.isBusiness }}" hint-placeholder-val="{{ false }}">
+                  <div data-r="contacts" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;">
+                    <sc-for list="{{ b.contacts }}" as="c" hint-placeholder-count="6">
+                      <a href="{{ c.href }}" style="font-size:13px;font-weight:600;color:{{ c.color }};cursor:{{ c.cursor }};" style-hover="color:{{ c.hoverColor }};">{{ c.label }}</a>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <div style="display:flex;align-items:flex-start;gap:14px;">
+                  {{ b.logoEl }}
+                  <p style="margin:0;font-size:13px;line-height:1.55;color:#6B6B7A;text-wrap:pretty;">{{ b.desc }}</p>
+                </div>
+                <sc-if value="{{ b.hasPrices }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px;">
+                    <p style="margin:0;font-size:13px;line-height:1.55;color:#1a1a1a;text-wrap:pretty;">{{ b.prices }}</p>
+                    <sc-if value="{{ b.hasChecked }}" hint-placeholder-val="{{ false }}">
+                      <p style="margin:4px 0 0;font-size:12px;color:#C9C6BE;text-align:right;">{{ b.checked }}</p>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      </span>
+    </div>
+
+    <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:center;padding:4px 24px 28px;">
+        <span onClick="{{ onMore }}" style="cursor:pointer;font-size:14px;font-weight:600;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:8px;padding:10px 22px;" style-hover="background:#F7F7F7;">{{ moreLabel }}</span>
+      </div>
+    </sc-if>
+
+    <div style="padding:0 24px 32px;">
+      <div data-r="map" ref="{{ mapRef }}" style="height:480px;border-radius:12px;overflow:hidden;border:1px solid #eee;"></div>
+    </div>
+  </div>
+  </div>
+
+  <div style="background:#ECECEC;">
+    <div style="max-width:1000px;margin:0 auto;padding:16px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-size:14px;color:#1a1a1a;text-align:center;">
+      <span>Add CEBUQ to your home screen — the directory opens like an app, no install needed.</span>
+      <span onClick="{{ onInstall }}" style="cursor:pointer;font-size:13px;font-weight:500;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:6px;padding:8px 16px;" style-hover="background:#fff;">Add to Home Screen</span>
+    </div>
+  </div>
+
+  <div style="background:#0E0E0E;color:#fff;">
+    <div data-r="footer" style="max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
+      <a href="index.html" style="display:inline-flex;"><img src="assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
+      <div style="font-size:13px;line-height:1.7;color:#B5B5B5;text-align:right;">
+        <div>JDN Square IT Center, Banilad, Mandaue City 6014 Cebu</div>
+        <div><a href="mailto:cebuq.plus@gmail.com?subject=CEBUQ%20%E2%80%94%20Add%20my%20business&body=Hi%20CEBUQ%20team%2C%20I%20would%20like%20to%20add%20my%20business%20to%20the%20directory.%0A%0ABusiness%20name%3A%0ACategory%20(e.g.%20Food%20%26%20Drink%20%2F%20Restaurants)%3A%0AArea%20(Cebu%20City%20%2F%20Mactan%20%2F%20Mandaue%20%2F%20Moalboal%20%2F%20Badian%20%2F%20Oslob)%3A%0AAddress%3A%0APhone%20%2F%20WhatsApp%3A%0AWebsite%20or%20Facebook%3A%0AGoogle%20Maps%20link%3A%0A%0AAnything%20else%20we%20should%20know%3A%0A" style="color:#fff;" style-hover="text-decoration:underline;">business@cebuq.com</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div data-r="tabbar" style="position:fixed;left:0;right:0;bottom:0;max-width:1000px;margin:0 auto;background:#6342D2;z-index:1300;">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+      <a href="{{ t.href }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px calc(14px + env(safe-area-inset-bottom));min-height:46px;font-size:11px;font-weight:500;color:#fff;">
+        <span style="display:flex;align-items:center;justify-content:center;height:20px;line-height:1;font-size:{{ t.size }};">{{ t.icon }}</span>
+        <span>{{ t.label }}</span>
+      </a>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000}}">
+const AREAS = ['All Cebu', 'Mactan', 'Cebu City', 'Mandaue City', 'Moalboal', 'Badian', 'Oslob'];
+// Район из адреса: ?area=moalboal → 'Moalboal'. Позволяет ссылаться на страницу
+// с уже выбранным регионом (подборки на главной, каталог).
+const URL_AREA = (function () {
+  try {
+    var q = new URLSearchParams(window.location.search).get('area');
+    if (!q) return 'All Cebu';
+    var slug = q.toLowerCase();
+    for (var i = 0; i < AREAS.length; i++) {
+      if (AREAS[i].toLowerCase().replace(/\s+/g, '-') === slug) return AREAS[i];
+    }
+  } catch (e) {}
+  return 'All Cebu';
+})();
+const CATEGORIES = [
+  ['food-drink','Food & Drink'], ['hotels-resorts','Hotels & Resorts'], ['tours-nature','Tours & Nature'],
+  ['diving-water','Diving & Water'], ['culture-history','Culture & History'], ['shopping-markets','Shopping & Markets'],
+  ['nightlife-entertainment','Nightlife & Entertainment'], ['transport-mobility','Transport & Mobility'],
+  ['money-travel-documents','Money & Travel Documents'], ['events-whats-on',"Events & What's On"],
+  ['health-medical','Health & Medical'], ['beauty-wellness','Beauty & Wellness'], ['home-living','Home & Living'],
+  ['schools-education','Schools & Education'], ['family-pets','Family & Pets'], ['fitness-sport','Fitness & Sport'],
+  ['work-business','Work & Business'], ['legal-finance','Legal & Finance'], ['transport-automotive','Transport & Automotive'],
+  ['essential-services','Essential Services']
+];
+const TABS = [['Home','⌂','19px','index.html'], ['Directory','☰','19px','directory.html'], ['Guide','◎','15px','guide.html'], ['Travel','⛟','16px','travel.html']];
+function fmtDate(v) {
+  const d = new Date(v);
+  if (isNaN(d)) return v;
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+}
+const TIER = {
+  Free:     { border:'1px solid #eee',    nameColor:'#1a1a1a', stroke:'#D5D2CA',  badge:'Verified',                   badgeColor:'#C9C6BE' },
+  Verified: { border:'1px solid #B29DFB', nameColor:'#1a1a1a', stroke:'url(#cq)', badge:'Verified by CEBUQ',          badgeColor:'#B29DFB' },
+  Business: { border:'2px solid #B29DFB', nameColor:'#6342D2', stroke:'url(#cq)', badge:'Verified by CEBUQ Business', badgeColor:'#B29DFB' }
+};
+const RANK = { Business:0, Verified:1, Free:1 };
+const PAGE = 20;
+const MORE = 50;
+const CURRENT_SLUG = 'essential-services';
+const MAX_PINS = 120;
+
+class Component extends DCLogic {
+  state = { area:URL_AREA, sub:'All', verifiedOnly:false, open:{}, menuOpen:false, menuCat:'essential-services', dirCats:[], burgerOpen:false, shown:PAGE, items:[], subs:[], seo:'', subSeo:{} };
+
+  syncFeatured() {
+    const cards = Array.from(document.querySelectorAll('[data-r="card"]'));
+    const img = document.querySelector('[data-r="featured"]');
+    if (!img) return;
+    const plain = cards.find(c => !c.querySelector('[data-r="featured"]'));
+    if (!plain) return;
+    const target = plain.getBoundingClientRect().height * 2 + 20;
+    const text = img.nextElementSibling;
+    const next = Math.max(110, Math.round(target - text.getBoundingClientRect().height));
+    if (String(next) + 'px' !== img.style.height) img.style.height = next + 'px';
+  }
+
+  componentDidMount() {
+    this._onResize = () => requestAnimationFrame(() => this.syncFeatured());
+    window.addEventListener('resize', this._onResize);
+    requestAnimationFrame(() => this.syncFeatured());
+    fetch('directory.json').then(r => r.json())
+      .then(d => this.setState({ dirCats: d.groups.reduce((a, g) => a.concat(g.cats), []) }))
+      .catch(() => {});
+    fetch('essential-services.json').then(r => r.json()).then(d => {
+      const items = d.items.slice().sort((a, b) =>
+        RANK[a.tier] - RANK[b.tier] || (a.name || '').localeCompare(b.name || '', 'en', { sensitivity:'base' }));
+      this.setState({ items, subs: d.subs || [], seo: d.seo || '', subSeo: d.subSeo || {} });
+    }).catch(() => {});
+    window.addEventListener('beforeinstallprompt', this.onPrompt);
+    this.initMap();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('beforeinstallprompt', this.onPrompt);
+    window.removeEventListener('resize', this._onResize);
+  }
+  componentDidUpdate() { this.drawPins(); requestAnimationFrame(() => this.syncFeatured()); }
+
+  onPrompt = e => { e.preventDefault(); this.installEvent = e; };
+
+  initMap() {
+    if (!window.L || !this.mapEl) return setTimeout(() => this.initMap(), 150);
+    // Повторный L.map на том же контейнере бросает исключение и оставляет карту мёртвой
+    if (this.map) {
+      if (this.map.getContainer() === this.mapEl) return;
+      this.map.remove();
+      this.map = null;
+    }
+    if (this.mapEl._leaflet_id) return;
+    this.map = L.map(this.mapEl, { scrollWheelZoom:false }).setView([10.3, 123.9], 9);
+    this._fitKey = null;
+    this.map.attributionControl.setPrefix(false);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, attribution: 'Esri, HERE, Garmin, OpenStreetMap', className: 'cq-tiles' }).addTo(this.map);
+    this.layer = L.layerGroup().addTo(this.map);
+    const icon = src => L.icon({ iconUrl:src, iconSize:[22,40], iconAnchor:[11,40], popupAnchor:[0,-36] });
+    this.greyIcon = icon('assets/pin-grey.png');
+    this.purpleIcon = icon('assets/pin-purple.png');
+    this.drawPins();
+  }
+
+  visible(sub) {
+    const st = this.state;
+    const s = sub === undefined ? st.sub : sub;
+    return st.items.filter(b =>
+      (st.area === 'All Cebu' || b.area === st.area) &&
+      (s === 'All' || (b.subs || []).indexOf(s) >= 0) &&
+      (!st.verifiedOnly || b.tier !== 'Free')
+    );
+  }
+
+  drawPins() {
+    if (!this.map || !this.layer) return;
+    this.layer.clearLayers();
+    const pts = [];
+    // Платные пины — все из текущего фильтра; Free — только показанные карточками
+    const all = this.visible().filter(b => b.lat);
+    const paidPins = all.filter(b => b.tier !== 'Free');
+    const shownFree = all.filter(b => b.tier === 'Free').slice(0, this.state.shown || PAGE);
+    const freePins = shownFree.slice(0, Math.max(0, MAX_PINS - paidPins.length));
+    paidPins.concat(freePins).forEach(b => {
+      const paid = b.tier === 'Business' || b.tier === 'Verified';
+      L.marker([b.lat, b.lng], { icon: paid ? this.purpleIcon : this.greyIcon, zIndexOffset: paid ? 1000 : 0 })
+        .addTo(this.layer).bindPopup(b.name);
+      pts.push([b.lat, b.lng]);
+    });
+    if (!pts.length) return;
+    // Фит только когда набор пинов изменился, и после раскладки контейнера:
+    // синхронный fitBounds сразу за invalidateSize отменяется его же resize-событием.
+    const key = pts.map(p => p[0].toFixed(4) + ',' + p[1].toFixed(4)).join('|');
+    if (key === this._fitKey) return;
+    // Только массивы координат: объекты L.latLngBounds ломаются, если на странице
+    // оказывается вторая копия Leaflet (instanceof не проходит внутри библиотеки).
+    const lats = pts.map(p => p[0]), lngs = pts.map(p => p[1]);
+    const minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
+    const minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
+    const padLat = Math.max((maxLat - minLat) * 0.08, 0.004);
+    const padLng = Math.max((maxLng - minLng) * 0.08, 0.004);
+    const bb = [[minLat - padLat, minLng - padLng], [maxLat + padLat, maxLng + padLng]];
+    const center = [(minLat + maxLat) / 2, (minLng + maxLng) / 2];
+    const tryFit = (attempt) => {
+      if (!this.map) return;
+      this.map.invalidateSize({ animate: false });
+      const size = this.map.getSize();
+      if (size.x < 50 || size.y < 50) {
+        if (attempt < 20) setTimeout(() => tryFit(attempt + 1), 120);
+        return;
+      }
+      const z = Math.min(16, this.map.getBoundsZoom(bb, false, [20, 20]));
+      this.map.setView(center, z, { animate: false });
+      if (this.map.getZoom() !== z && attempt < 6) { setTimeout(() => tryFit(attempt + 1), 140); return; }
+      this._fitKey = key;
+    };
+    clearTimeout(this._fitTimer);
+    this._fitTimer = setTimeout(() => tryFit(0), 60);
+  }
+
+  install = () => {
+    if (this.installEvent) { this.installEvent.prompt(); return; }
+    const ua = navigator.userAgent;
+    if (/iPhone|iPad/.test(ua)) window.alert('In Safari: tap the Share button, then choose "Add to Home Screen"');
+    else if (/Android/.test(ua)) window.alert('In Chrome: open the ⋮ menu, then choose "Add to Home screen"');
+    else window.alert('Open this page on your phone to add it to the home screen');
+  };
+
+  jsonLd(items) {
+    return JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: items.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: Object.assign({
+          '@type': 'LocalBusiness',
+          name: b.name,
+          description: b.desc || undefined,
+          address: { '@type': 'PostalAddress', streetAddress: b.address, addressRegion: 'Cebu', addressCountry: 'PH' },
+          geo: b.lat ? { '@type': 'GeoCoordinates', latitude: b.lat, longitude: b.lng } : undefined,
+          priceRange: b.price || undefined,
+          telephone: b.phone || undefined,
+          url: b.website || undefined,
+          sameAs: b.maps || undefined,
+        }, b.rating && +b.reviews ? { aggregateRating: {
+          '@type': 'AggregateRating', ratingValue: b.rating, reviewCount: b.reviews, bestRating: '5'
+        } } : {})
+      }))
+    });
+  }
+
+  renderVals() {
+    const st = this.state;
+    const el = React.createElement;
+    const link = (text, href, color) => el('a', { href, target:'_blank', rel:'noreferrer',
+      style:{ color, textDecoration:'none' },
+      onMouseEnter: e => { e.currentTarget.style.textDecoration = 'underline'; },
+      onMouseLeave: e => { e.currentTarget.style.textDecoration = 'none'; } }, text);
+    const all = this.visible();
+    // Featured: платные карточки; если их нет — топ-3 по рейтингу Google
+    const TR = { Business: 0, Verified: 1, Free: 2 };
+    const paidTop = all.filter(b => b.tier === 'Business' || b.tier === 'Verified')
+      .sort((a, b) => TR[a.tier] - TR[b.tier] || (+b.rating - +a.rating) || (+b.reviews - +a.reviews));
+    const featured = paidTop.length ? paidTop : all.slice()
+      .sort((a, b) => (+b.rating - +a.rating) || (+b.reviews - +a.reviews)).slice(0, 3);
+    const fset = new Set(featured);
+    const rest = all.filter(b => !fset.has(b))
+      .sort((a, b) => (+b.rating - +a.rating) || (+b.reviews - +a.reviews) ||
+        (a.name || '').localeCompare(b.name || '', 'en', { sensitivity:'base' }));
+    const vis = featured.concat(rest);
+    const page = vis.slice(0, st.shown);
+
+    const cards = page.map(b => {
+      const t = TIER[b.tier] || TIER.Free;
+      const paid = b.tier !== 'Free';
+      const business = b.tier === 'Business';
+      const open = !!st.open[b.id];
+      const contacts = [
+        ['Messenger', b.messenger], ['WhatsApp', b.whatsapp], ['Telegram', b.telegram],
+        ['Live Chat', b.liveChat], ['Email', b.email ? 'mailto:' + b.email : ''],
+        ['Call Us', b.phone ? 'tel:' + b.phone.replace(/\s/g,'') : '']
+      ].map(([label, href]) => ({
+        label, href: href || undefined,
+        color: href ? '#1a1a1a' : '#D9D7D3',
+        hoverColor: href ? '#6342D2' : '#D9D7D3',
+        cursor: href ? 'pointer' : 'default'
+      }));
+      return {
+        key: b.id, border: t.border, nameColor: t.nameColor, iconStroke: t.stroke,
+        badge: t.badge, badgeColor: t.badgeColor, isFree: !paid, isBusiness: business,
+        nameEl: business && b.website ? link(b.name, b.website, '#6342D2') : b.name,
+        meta: b.price + ' · ' + (b.sub || ''),
+        ratingEl: (() => {
+          const txt = (b.rating || '').toString().trim() ? '★ ' + b.rating : '—';
+          if (paid && b.maps) return link(txt, b.maps, '#B29DFB');
+          return el('span', { style:{ color: paid ? '#B29DFB' : '#D9D7D3' } }, txt);
+        })(),
+        areaEl: paid && b.maps ? link(b.area, b.maps, '#B29DFB')
+                               : el('span', { style:{ color: paid ? '#B29DFB' : '#D9D7D3' } }, b.area),
+        toggleEl: paid ? el('span', { style:{ fontSize:'12px', fontWeight: business ? 600 : 400,
+              color: business ? '#6342D2' : '#B29DFB', display:'inline-flex', alignItems:'center', gap:'5px' } },
+              business ? 'Get in Touch' : null,
+              el('span', { style:{ display:'inline-block', transition:'transform .15s', transform: open ? 'rotate(180deg)' : 'none' } }, '▾')) : '',
+        toggleCursor: paid ? 'pointer' : 'default',
+        onToggle: paid ? () => this.setState(s => ({ open: Object.assign({}, s.open, { [b.id]: !s.open[b.id] }) })) : undefined,
+        headCursor: paid && open ? 'pointer' : 'default',
+        onHead: paid && open ? (e => { if (!e.target.closest('a')) this.setState(s => ({ open: Object.assign({}, s.open, { [b.id]: false }) })); }) : undefined,
+        open, desc: paid ? (b.desc || '') : '', contacts,
+        panelDisplay: paid && open ? 'block' : 'none',
+        hasPhoto: !!(business && b.photo),
+        logoEl: business && b.logo ? React.createElement('img', {
+          src: b.logo, alt: b.logoAlt || b.name,
+          style: { width:'76px', height:'76px', flexShrink:0, objectFit:'contain', borderRadius:'8px' }
+        }) : null,
+        photoEl: business && b.photo ? React.createElement('img', {
+          'data-r': 'featured', src: b.photo, alt: b.photoAlt || b.name,
+          style: { display:'block', width:'100%', height:'150px', objectFit:'cover', background:'#F2F2F5' }
+        }) : null,
+        prices: b.prices || '', hasPrices: !!(business && b.prices),
+        checked: b.pricesChecked ? 'Last checked ' + fmtDate(b.pricesChecked) : '',
+        hasChecked: !!(business && b.prices && b.pricesChecked)
+      };
+    });
+
+    return {
+      cardsL: cards.filter((_, i) => i % 2 === 0),
+      cardsR: cards.filter((_, i) => i % 2 === 1),
+      structuredData: this.jsonLd(page),
+      hasMore: vis.length > st.shown,
+      moreLabel: 'Show more (' + Math.max(0, vis.length - st.shown) + ')',
+      onMore: () => this.setState(s => ({ shown: s.shown + MORE })),
+      categories: CATEGORIES.map(([slug, label]) => {
+        const d = st.dirCats.find(c => c.slug === slug);
+        const n = d ? ((d.byArea || {})['All Cebu'] || 0) : 0;
+        const active = st.menuCat === slug;
+        return {
+          label, count: n || '',
+          href: n >= 5 ? slug + '.html' : undefined,
+          color: slug === CURRENT_SLUG ? '#6342D2' : '#1a1a1a',
+          weight: slug === CURRENT_SLUG ? '700' : '500',
+          bg: active ? '#F7F7F7' : 'transparent',
+          onHover: () => this.setState({ menuCat: slug }),
+        };
+      }),
+      menuCatLabel: (CATEGORIES.find(c => c[0] === st.menuCat) || ['', ''])[1],
+      menuSubs: ((st.dirCats.find(c => c.slug === st.menuCat) || {}).subs || []).map(s => ({
+        label: s.name,
+        href: ((s.byArea || {})['All Cebu'] || 0) >= 5 ? 'directory/' + s.slug + '.html' : undefined,
+        color: '#1a1a1a',
+      })),
+      // Иконки — простые геометрические фигуры в цветах бренда.
+      tabs: TABS.map(([label, icon, size, href]) => {
+        const el = React.createElement;
+        const svg = (w, h, kids) => el('svg', { width: 20, height: 20, viewBox: '0 0 20 20',
+          style: { display: 'block' }, 'aria-hidden': 'true' }, kids);
+        const shape = {
+          Home: svg(20, 20, el('path', { d: 'M10 3.5 L17.5 16.5 H2.5 Z', fill: '#ffffff' })),
+          Directory: svg(20, 20, el('rect', { x: 1, y: 4.5, width: 18, height: 11, rx: 2, fill: '#B29DFB' })),
+          Guide: svg(20, 20, el('circle', { cx: 10, cy: 10, r: 6.5, fill: '#FFE606' })),
+          Travel: svg(20, 20, el('rect', { x: 3.5, y: 3.5, width: 13, height: 13, rx: 1.5, fill: '#73FDEA' })),
+        };
+        return { label, size, href, icon: shape[label] || icon };
+      }),
+      seoText: st.sub === 'All' ? st.seo : (st.subSeo[st.sub] || ''),
+      hasSeo: !!(st.sub === 'All' ? st.seo : st.subSeo[st.sub]),
+      seoOpen: st.seoOpen !== false && !!(st.sub === 'All' ? st.seo : st.subSeo[st.sub]),
+      seoArrowColor: st.seoOpen !== false ? '#6342D2' : '#8B8B9A',
+      seoArrowTransform: st.seoOpen !== false ? 'rotate(180deg)' : 'none',
+      onSeoToggle: () => this.setState(s => ({ seoOpen: s.seoOpen === false })),
+      featuredTitle: 'Featured in ' + (st.area === 'All Cebu' ? 'Cebu' : st.area),
+      verifiedOnly: st.verifiedOnly,
+      onVerified: () => this.setState({ verifiedOnly: !st.verifiedOnly, shown: PAGE }),
+      menuOpen: st.menuOpen,
+      onMenuOpen: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
+      onMenuClose: () => {
+        clearTimeout(this._menuTimer);
+        this._menuTimer = setTimeout(() => this.setState({ menuOpen: false }), 320);
+      },
+      onMenuToggle: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
+      burgerOpen: st.burgerOpen,
+      onBurger: () => this.setState({ burgerOpen: !st.burgerOpen }),
+      langOpen: st.langOpen,
+      onLangOpen: () => { clearTimeout(this._langTimer); this.setState({ langOpen: true }); },
+      onLangClose: () => { clearTimeout(this._langTimer); this._langTimer = setTimeout(() => this.setState({ langOpen: false }), 260); },
+      onInstall: this.install,
+      mapRef: n => {
+        if (n === this.mapEl) return;
+        this.mapEl = n;
+        if (n) this.initMap();
+      },
+      areas: AREAS.map((a, i) => ({
+        label: a, sep: i > 0,
+        weight: st.area === a ? '700' : '400',
+        underline: st.area === a ? 'underline' : 'none',
+        onClick: () => this.setState({ area: a, shown: PAGE })
+      })),
+      allPill: {
+        count: this.visible('All').length,
+        countBg: st.sub === 'All' ? 'rgba(255,255,255,0.25)' : '#F2F2F5',
+        countColor: st.sub === 'All' ? '#ffffff' : '#6B6B7A',
+        border: st.sub === 'All' ? '#6342D2' : '#eee',
+        bg: st.sub === 'All' ? '#6342D2' : '#ffffff',
+        color: st.sub === 'All' ? '#ffffff' : '#1a1a1a',
+        onClick: () => this.setState({ sub: 'All', shown: PAGE }),
+      },
+      pills: st.subs.map(s => {
+        const active = st.sub === s;
+        return {
+          label: s, count: s === 'All' ? '' : this.visible(s).length, hasCount: s !== 'All',
+          border: active ? '#6342D2' : '#eee',
+          bg: active ? '#6342D2' : '#ffffff',
+          color: active ? '#ffffff' : '#1a1a1a',
+          countBg: active ? 'rgba(255,255,255,0.25)' : '#F2F2F5',
+          countColor: active ? '#ffffff' : '#6B6B7A',
+          onClick: () => this.setState({ sub: s, shown: PAGE })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
