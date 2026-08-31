@@ -698,7 +698,7 @@ class Component extends DCLogic {
         open, desc: paid ? (b.desc || '') : '', contacts,
         panelDisplay: paid && open ? 'block' : 'none',
         hasPhoto: !!(business && b.photo),
-        minH: (business && b.photo) ? '280px' : '130px',
+        minH: (business && b.photo) ? '300px' : '140px',
         logoEl: business && b.logo ? React.createElement('img', {
           src: ASSET_PREFIX + b.logo, alt: b.logoAlt || b.name,
           style: { width:'76px', height:'76px', flexShrink:0, objectFit:'contain', borderRadius:'8px' }
