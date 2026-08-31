@@ -9,7 +9,7 @@
 <x-dc>
 <helmet>
 <meta name="theme-color" content="#6342D2">
-<title>CEBUQ Business Directory | Business</title>
+<title>CEBUQ Business Directory | Search</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
@@ -34,6 +34,8 @@
   }
 </script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -41,27 +43,31 @@
   body { margin:0; background:#fff; font-family:'Avenir Next', Avenir, Mulish, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing:antialiased; }
   a { color:#6342D2; text-decoration:none; }
   a:hover { color:#4D33A4; }
+  .leaflet-container { font-family:'Avenir Next', Avenir, Mulish, 'Helvetica Neue', Arial, sans-serif; }
+  .cq-tiles { filter: brightness(1.03); }
   [data-r="burger"], [data-r="tabbar"] { display:none; }
+  [data-r="pillrow"]::-webkit-scrollbar, [data-r="regionrow"]::-webkit-scrollbar { display:none; }
   @media (max-width: 820px) { [data-r="lang"] { display:none !important; } }
   @media (max-width: 700px) {
     [data-r="header"] { flex-wrap:nowrap !important; }
     [data-r="nav"] { display:none !important; }
     [data-r="lang"] { display:none !important; }
     [data-r="burger"] { display:flex !important; }
-    [data-r="hero"] { padding:36px 20px !important; }
-    [data-r="hero-cta"] { flex-wrap:nowrap !important; gap:8px !important; }
-    [data-r="hero-cta"] > a { flex:0 1 auto !important; min-width:0 !important; max-width:184px !important; box-sizing:border-box !important; padding:11px 12px !important; font-size:13.5px !important; text-align:center !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
-    [data-r="hero-h1"] { font-size:30px !important; }
-    [data-r="hero-sub"] { font-size:18px !important; }
-    [data-r="regionrow"] { flex-wrap:nowrap !important; justify-content:flex-start !important; overflow-x:auto !important; padding:14px 16px !important; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
-    [data-r="regionrow"]::-webkit-scrollbar { display:none; }
-    [data-r="regionrow"] > span { flex:0 0 auto !important; white-space:nowrap !important; }
+    [data-r="cards"] { flex-direction:column !important; padding:20px !important; }
+    [data-r="cards"] > span { width:100% !important; min-width:0 !important; flex:0 0 auto !important; }
+    [data-r="h1"] { font-size:26px !important; }
+    [data-r="map"] { height:300px !important; }
+    [data-r="contacts"] { flex-wrap:wrap !important; justify-content:flex-start !important; gap:12px 18px !important; }
     [data-r="footer"] { flex-direction:column !important; align-items:center !important; text-align:center !important; }
     [data-r="footer"] > div { text-align:center !important; }
     [data-r="tabbar"] { display:flex !important; }
     [data-r="page"] { padding-bottom:calc(62px + env(safe-area-inset-bottom)) !important; }
     [data-r="menu"] { grid-template-columns:1fr !important; grid-template-rows:none !important; grid-auto-flow:row !important; width:262px !important; max-height:60vh !important; overflow-y:auto !important; }
     [data-r="menucols"] { grid-template-columns:1fr !important; grid-template-rows:none !important; grid-auto-flow:row !important; border-right:none !important; }
+    [data-r="regionrow"] { flex-wrap:nowrap !important; justify-content:flex-start !important; overflow-x:auto !important; padding:14px 16px !important; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    [data-r="regionrow"]::-webkit-scrollbar { display:none; }
+    [data-r="regionrow"] > span { flex:0 0 auto !important; white-space:nowrap !important; }
+    [data-r="pillrow"] { -webkit-overflow-scrolling:touch; }
   }
 </style>
 </helmet>
@@ -78,6 +84,12 @@
   </defs></svg>
 
   <div style="position:sticky;top:0;z-index:1200;background:#fff;">
+    <div style="display:none;background:#FCD116;">
+      <div style="max-width:1000px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <span style="font-size:17px;font-weight:500;">Cebu Business Directory</span>
+        <a href="unlock.html" style="font-size:13px;font-weight:500;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:6px;padding:10px 20px;">Add your business</a>
+      </div>
+    </div>
     <div style="border-bottom:1px solid #eee;">
       <div data-r="header" style="position:relative;max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:26px;">
         <a href="index.html" style="display:inline-flex;flex-shrink:0;"><picture>
@@ -86,12 +98,12 @@
         </picture></a>
         <nav data-r="nav" style="display:flex;align-items:center;gap:22px;font-size:15px;margin-left:auto;flex-shrink:0;">
           <span onMouseEnter="{{ onMenuOpen }}" onMouseLeave="{{ onMenuClose }}" style="padding-bottom:14px;margin-bottom:-14px;">
-            <a href="directory.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Directory ▾</a>
+            <a href="directory.html" style="color:#1a1a1a;font-weight:700;">Directory ▾</a>
             <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
               <span data-r="menu" style="position:absolute;top:100%;right:24px;display:grid;grid-template-columns:460px 270px;width:760px;max-width:calc(100vw - 32px);background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:10px;z-index:10;">
                 <span data-r="menucols" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10, auto);grid-auto-flow:column;border-right:1px solid #F0F0F2;padding-right:8px;">
-                  <sc-for list="{{ menuCats }}" as="c" hint-placeholder-count="20">
-                    <a href="{{ c.href }}" onMouseEnter="{{ c.onHover }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;font-size:14px;font-weight:500;color:{{ c.color }};background:{{ c.bg }};border-radius:6px;white-space:nowrap;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
+                  <sc-for list="{{ categories }}" as="c" hint-placeholder-count="20">
+                    <a href="{{ c.href }}" onMouseEnter="{{ c.onHover }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;font-size:14px;font-weight:{{ c.weight }};color:{{ c.color }};background:{{ c.bg }};border-radius:6px;white-space:nowrap;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
                   </sc-for>
                 </span>
                 <span style="display:flex;flex-direction:column;padding:2px 4px 2px 14px;">
@@ -105,7 +117,7 @@
           </span>
           <a href="guide.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Guide</a>
           <a href="travel.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Travel</a>
-          <span style="color:#1a1a1a;font-weight:700;">Business</span>
+          <a href="business.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Business</a>
           <span onClick="{{ onSearchOpen }}" title="Search" style="display:inline-flex;align-items:center;cursor:pointer;color:#1a1a1a;" style-hover="color:#6342D2;">
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="display:block;">
               <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
@@ -132,7 +144,7 @@
           </svg>
           <sc-if value="{{ burgerOpen }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;top:calc(100% + 10px);right:0;display:flex;flex-direction:column;width:262px;max-height:70vh;overflow-y:auto;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.16);padding:8px;z-index:1400;">
-              <sc-for list="{{ menuCats }}" as="c" hint-placeholder-count="20">
+              <sc-for list="{{ categories }}" as="c" hint-placeholder-count="20">
                 <a href="{{ c.href }}" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
               </sc-for>
               <span style="height:1px;background:#eee;margin:6px 8px;"></span>
@@ -153,42 +165,102 @@
         </span>
       </div>
     </div>
-  </div>
-
-
-  <div style="background:#0E0E0E;">
-  <div data-r="hero" style="box-sizing:border-box;max-width:1000px;margin:0 auto;position:relative;overflow:hidden;background:#0E0E0E;color:#fff;padding:56px 20px;">
-    <div style="position:relative;z-index:2;max-width:560px;">
-      <h1 data-r="hero-h1" style="margin:0 0 20px;font-size:44px;font-weight:800;line-height:1.15;">Tell us what you need in Cebu <span style="font-weight:400;">— we'll make it happen.</span></h1>
-      <p data-r="hero-sub" style="margin:0 0 16px;font-size:22px;font-weight:700;color:#8B6CF7;">For visitors and residents.</p>
-      <p style="margin:0;font-size:17px;line-height:1.5;">Free listing for your Cebu business. Verified upgrade available.</p>
-    </div>
-  </div>
-
-  <div data-r="regions" style="background:#ECECEC;">
-    <div data-r="regionrow" style="padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-size:14px;">
-      <sc-for list="{{ areaChips }}" as="a" hint-placeholder-count="7">
+      <div data-r="regions" style="background:#ECECEC;">
+    <div data-r="regionrow" style="max-width:1000px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-size:14px;">
+      <sc-for list="{{ areas }}" as="a" hint-placeholder-count="7">
         <span style="display:flex;align-items:center;gap:14px;">
           <sc-if value="{{ a.sep }}" hint-placeholder-val="{{ true }}"><span style="color:#8B8B8B;">·</span></sc-if>
-          <a href="{{ a.href }}" style="color:#1a1a1a;" style-hover="text-decoration:underline;">{{ a.name }}</a>
+          <span onClick="{{ a.onClick }}" style="cursor:pointer;color:#1a1a1a;font-weight:{{ a.weight }};text-decoration:{{ a.underline }};" style-hover="text-decoration:underline;">{{ a.label }}</span>
         </span>
       </sc-for>
     </div>
   </div>
+
+  <div style="max-width:1000px;margin:0 auto;padding:28px 24px 0;">
+    <h1 data-r="h1" style="margin:0;font-size:32px;font-weight:800;letter-spacing:-0.01em;">Search</h1>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 16px;border:1.5px solid #E4E4E9;border-radius:10px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#B9B9C2" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;">
+        <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
+      </svg>
+      <input ref="{{ qRef }}" onInput="{{ onQuery }}" placeholder="Business, category or area — try “coffee moalboal”" style="flex:1;min-width:0;border:none;outline:none;font-size:16px;font-family:inherit;color:#1a1a1a;background:transparent;" />
+      <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+        <span onClick="{{ onClear }}" style="cursor:pointer;font-size:20px;line-height:1;color:#B9B9C2;" style-hover="color:#1a1a1a;">×</span>
+      </sc-if>
+    </div>
+    <p style="margin:12px 0 0;font-size:15px;color:#8B8B9A;">{{ summary }}</p>
   </div>
 
-  <div style="box-sizing:border-box;max-width:1000px;margin:0 auto;padding:64px 24px 80px;text-align:center;">
-    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#B9B9C2;">Business</div>
-    <h2 style="margin:12px 0 10px;font-size:28px;font-weight:800;letter-spacing:-0.01em;">Under construction</h2>
-    <p style="margin:0 auto;max-width:520px;font-size:16px;line-height:1.55;color:#8B8B9A;text-wrap:pretty;">This section is being built. In the meantime, browse the directory — 1,700+ places across Cebu, checked and rated.</p>
-    <div data-r="hero-cta" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
-      <a href="directory.html" style="box-sizing:border-box;min-width:214px;text-align:center;font-size:15px;font-weight:600;color:#fff;background:#6342D2;border:1.5px solid #6342D2;border-radius:8px;padding:12px 24px;" style-hover="background:#4D33A4;color:#fff;">Browse the directory</a>
-      <a href="unlock.html" style="box-sizing:border-box;min-width:214px;text-align:center;font-size:15px;font-weight:600;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:8px;padding:12px 24px;" style-hover="background:#F7F7F7;color:#1a1a1a;">Add your business</a>
+  <sc-if value="{{ hasFacets }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1000px;margin:0 auto;padding:16px 24px 0;">
+      <div data-r="pillrow" style="display:flex;flex-wrap:nowrap;align-items:center;gap:10px;overflow-x:auto;min-width:0;scrollbar-width:none;">
+        <sc-for list="{{ facets }}" as="p" hint-placeholder-count="6">
+          <span onClick="{{ p.onClick }}" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;cursor:pointer;padding:8px 16px;border-radius:20px;font-size:14px;white-space:nowrap;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }};">
+            {{ p.label }}
+            <span style="font-size:12px;line-height:1.5;padding:1px 7px;border-radius:10px;background:{{ p.countBg }};color:{{ p.countColor }};">{{ p.count }}</span>
+          </span>
+        </sc-for>
+      </div>
     </div>
+  </sc-if>
+
+  <div style="background:#FCFCFD;margin-top:20px;">
+    <div data-r="cards" style="box-sizing:border-box;max-width:1000px;margin:0 auto;display:flex;align-items:flex-start;gap:20px;padding:20px;">
+      <span style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:20px;">
+        <sc-for list="{{ resultsL }}" as="r" hint-placeholder-count="5">
+          <a href="{{ r.href }}" data-r="card" style="min-width:0;min-height:130px;border:{{ r.border }};border-radius:12px;padding:15px;background:#fff;color:#1a1a1a;" style-hover="border-color:#B29DFB;">
+            <span style="display:block;font-size:16px;font-weight:700;color:{{ r.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
+            <span style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+              <sc-if value="{{ r.paid }}" hint-placeholder-val="{{ false }}">
+                <svg viewBox="0 0 490 490" width="17" height="17" style="flex-shrink:0;" aria-hidden="true"><path d="M200.9 120.6 L219.1 34.6 L270.9 34.6 L289.1 120.6 A132 132 0 0 1 301.8 125.8 L375.4 77.9 L412.1 114.6 L364.2 188.2 A132 132 0 0 1 369.4 200.9 L455.4 219.1 L455.4 270.9 L369.4 289.1 A132 132 0 0 1 364.2 301.8 L412.1 375.4 L375.4 412.1 L301.8 364.2 A132 132 0 0 1 289.1 369.4 L270.9 455.4 L219.1 455.4 L200.9 369.4 A132 132 0 0 1 188.2 364.2 L114.6 412.1 L77.9 375.4 L125.8 301.8 A132 132 0 0 1 120.6 289.1 L34.6 270.9 L34.6 219.1 L120.6 200.9 A132 132 0 0 1 125.8 188.2 L77.9 114.6 L114.6 77.9 L188.2 125.8 Z" fill="none" stroke="url(#cq)" stroke-width="30" stroke-linejoin="round"></path></svg>
+                <span style="font-size:13px;color:#B29DFB;">{{ r.badge }}</span>
+              </sc-if>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;min-width:0;">
+              <span style="color:#8B8B9A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.meta }}</span>
+              <span style="white-space:nowrap;color:{{ r.ratingColor }};">{{ r.rating }}</span>
+            </span>
+            <span style="display:block;margin-top:6px;font-size:14px;color:#B29DFB;">{{ r.area }}</span>
+          </a>
+        </sc-for>
+      </span>
+      <span style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:20px;">
+        <sc-for list="{{ resultsR }}" as="r" hint-placeholder-count="5">
+          <a href="{{ r.href }}" data-r="card" style="min-width:0;min-height:130px;border:{{ r.border }};border-radius:12px;padding:15px;background:#fff;color:#1a1a1a;" style-hover="border-color:#B29DFB;">
+            <span style="display:block;font-size:16px;font-weight:700;color:{{ r.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
+            <span style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+              <sc-if value="{{ r.paid }}" hint-placeholder-val="{{ false }}">
+                <svg viewBox="0 0 490 490" width="17" height="17" style="flex-shrink:0;" aria-hidden="true"><path d="M200.9 120.6 L219.1 34.6 L270.9 34.6 L289.1 120.6 A132 132 0 0 1 301.8 125.8 L375.4 77.9 L412.1 114.6 L364.2 188.2 A132 132 0 0 1 369.4 200.9 L455.4 219.1 L455.4 270.9 L369.4 289.1 A132 132 0 0 1 364.2 301.8 L412.1 375.4 L375.4 412.1 L301.8 364.2 A132 132 0 0 1 289.1 369.4 L270.9 455.4 L219.1 455.4 L200.9 369.4 A132 132 0 0 1 188.2 364.2 L114.6 412.1 L77.9 375.4 L125.8 301.8 A132 132 0 0 1 120.6 289.1 L34.6 270.9 L34.6 219.1 L120.6 200.9 A132 132 0 0 1 125.8 188.2 L77.9 114.6 L114.6 77.9 L188.2 125.8 Z" fill="none" stroke="url(#cq)" stroke-width="30" stroke-linejoin="round"></path></svg>
+                <span style="font-size:13px;color:#B29DFB;">{{ r.badge }}</span>
+              </sc-if>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;min-width:0;">
+              <span style="color:#8B8B9A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.meta }}</span>
+              <span style="white-space:nowrap;color:{{ r.ratingColor }};">{{ r.rating }}</span>
+            </span>
+            <span style="display:block;margin-top:6px;font-size:14px;color:#B29DFB;">{{ r.area }}</span>
+          </a>
+        </sc-for>
+      </span>
+    </div>
+    <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;justify-content:center;padding:0 24px 28px;">
+        <span onClick="{{ onMore }}" style="cursor:pointer;font-size:14px;font-weight:600;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:8px;padding:10px 22px;" style-hover="background:#F4F4F6;">{{ moreLabel }}</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1000px;margin:0 auto;padding:8px 24px 44px;text-align:center;">
+        <p style="margin:0;font-size:15px;color:#8B8B9A;">{{ emptyText }}</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px;">
+          <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="5">
+            <span onClick="{{ s.onClick }}" style="cursor:pointer;padding:8px 15px;border:1.5px solid #eee;border-radius:20px;font-size:14px;color:#1a1a1a;background:#fff;" style-hover="border-color:#B29DFB;color:#6342D2;">{{ s.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
   </div>
 
   <div style="background:#0E0E0E;color:#fff;">
-    <div data-r="footer" style="box-sizing:border-box;max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
+    <div data-r="footer" style="max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
       <a href="index.html" style="display:inline-flex;"><img src="assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
       <div style="font-size:13px;line-height:1.7;color:#B5B5B5;text-align:right;">
         <div><a href="https://tours.cebuq.com/en" target="_blank" rel="noreferrer" style="color:#fff;font-weight:600;" style-hover="text-decoration:underline;">CEBUQ Travel &amp; Tours</a></div>
@@ -245,38 +317,83 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000}}">
 const ASSET_PREFIX = '';
+const AREAS = ['All Cebu', 'Mactan', 'Cebu City', 'Mandaue City', 'Moalboal', 'Badian', 'Oslob'];
 const TABS = ['Home','Directory','Guide','Travel','Business'];
 const MIN_PUBLISH = 5;
-const AREAS = ['All Cebu', 'Mactan', 'Cebu City', 'Mandaue City', 'Moalboal', 'Badian', 'Oslob'];
+const PAGE = 20;
+const SUGGESTIONS = ['coffee moalboal', 'dive centres', 'dentist cebu city', 'beach resort mactan', 'laundry', 'visa'];
+const URL_Q = (() => {
+  try { return new URLSearchParams(location.search).get('q') || ''; } catch (e) { return ''; }
+})();
 
 class Component extends DCLogic {
-  state = { searchOpen:false, searchQuery:'', groups: [], menuOpen: false, menuCat: 'food-drink', burgerOpen: false };
+  state = { query: URL_Q, area: 'All Cebu', cat: 'All', shown: PAGE,
+    searchOpen: false, searchQuery: '', menuOpen: false, menuCat: 'food-drink', burgerOpen: false, langOpen: false,
+    index: null, groups: [] };
 
   componentDidMount() {
-    fetch('directory.json').then(r => r.json())
-      .then(d => this.setState({ groups: d.groups }))
-      .catch(() => {});
+    fetch(ASSET_PREFIX + 'search-index.json').then(r => r.json())
+      .then(d => this.setState({ index: d })).catch(() => this.setState({ index: [] }));
+    fetch(ASSET_PREFIX + 'directory.json').then(r => r.json())
+      .then(d => this.setState({ groups: d.groups })).catch(() => {});
+    if (this._q) this._q.value = URL_Q;
   }
 
-  // ---- Поиск по всем листингам (индекс грузится при первом открытии) ----
+  // ---- Поиск: слова ищем по названию, подкатегории, категории и району ----
+  matches(scopeArea, scopeCat) {
+    const q = (this.state.query || '').trim().toLowerCase();
+    const idx = this.state.index || [];
+    if (!q) return [];
+    const words = q.split(/\s+/);
+    const area = scopeArea === undefined ? this.state.area : scopeArea;
+    const cat = scopeCat === undefined ? this.state.cat : scopeCat;
+    return idx.filter(it => {
+      if (area !== 'All Cebu' && it.a !== area) return false;
+      if (cat !== 'All' && it.c !== cat) return false;
+      const hay = (it.n + ' ' + it.s + ' ' + it.c + ' ' + it.a).toLowerCase();
+      return words.every(w => hay.indexOf(w) >= 0);
+    });
+  }
+
   openSearch() {
     this.setState({ searchOpen: true, searchQuery: '', burgerOpen: false, menuOpen: false });
-    if (!this._searchIndex) {
-      fetch(ASSET_PREFIX + 'search-index.json').then(r => r.json())
-        .then(d => { this._searchIndex = d; this.forceUpdate(); })
-        .catch(() => { this._searchIndex = []; this.forceUpdate(); });
-    }
     setTimeout(() => { if (this._searchInput) this._searchInput.focus(); }, 40);
   }
 
   searchHits() {
     const q = (this.state.searchQuery || '').trim().toLowerCase();
-    if (!q || !this._searchIndex) return [];
+    const idx = this.state.index;
+    if (!q || !idx) return [];
     const words = q.split(/\s+/);
-    return this._searchIndex.filter(it => {
+    return idx.filter(it => {
       const hay = (it.n + ' ' + it.s + ' ' + it.a).toLowerCase();
       return words.every(w => hay.indexOf(w) >= 0);
     }).slice(0, 30);
+  }
+
+  setQuery(v) {
+    this.setState({ query: v, shown: PAGE, cat: 'All' });
+    try {
+      const u = new URL(location.href);
+      if (v) u.searchParams.set('q', v); else u.searchParams.delete('q');
+      history.replaceState(null, '', u);
+    } catch (e) {}
+  }
+
+  card(it) {
+    const paid = it.t < 2;
+    return {
+      name: it.n,
+      nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
+      border: it.t === 0 ? '2px solid #B29DFB' : (it.t === 1 ? '1px solid #B29DFB' : '1px solid #eee'),
+      paid,
+      badge: it.t === 0 ? 'Verified by CEBUQ Business' : 'Verified by CEBUQ',
+      meta: [it.p, it.s].filter(Boolean).join(' · '),
+      rating: it.r ? '★ ' + it.r : '—',
+      ratingColor: paid ? '#B29DFB' : '#D9D7D3',
+      area: it.a,
+      href: ASSET_PREFIX + it.u,
+    };
   }
 
   renderVals() {
@@ -284,7 +401,19 @@ class Component extends DCLogic {
     const flat = st.groups.reduce((a, g) => a.concat(g.cats), []);
     const all = o => (o.byArea || {})['All Cebu'] || 0;
     const cur = flat.find(c => c.slug === st.menuCat) || {};
+    const hits = this.matches();
+    const page = hits.slice(0, st.shown);
+    const cards = page.map(it => this.card(it));
+    const q = (st.query || '').trim();
+    // фасеты по категориям — считаем без учёта текущего выбора категории
+    const byCat = {};
+    this.matches(undefined, 'All').forEach(it => { byCat[it.c] = (byCat[it.c] || 0) + 1; });
+    const catList = Object.keys(byCat).sort((a, b) => byCat[b] - byCat[a]);
+    const facets = q ? [{ label: 'All', n: this.matches(undefined, 'All').length, key: 'All' }]
+      .concat(catList.map(c => ({ label: c, n: byCat[c], key: c }))) : [];
+
     return {
+      // поиск в шапке
       searchOpen: st.searchOpen,
       onSearchOpen: () => this.openSearch(),
       onSearchClose: () => this.setState({ searchOpen: false }),
@@ -292,35 +421,72 @@ class Component extends DCLogic {
       onSearchInput: e => this.setState({ searchQuery: e.target.value }),
       searchRef: n => { this._searchInput = n; },
       searchResults: this.searchHits().map(it => ({
-        name: it.n,
-        nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
+        name: it.n, nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
         meta: [it.s, it.a].filter(Boolean).join(' · '),
-        rating: it.r ? '★ ' + it.r : '',
-        href: ASSET_PREFIX + it.u,
+        rating: it.r ? '★ ' + it.r : '', href: ASSET_PREFIX + it.u,
       })),
       searchAllHref: ASSET_PREFIX + 'search.html?q=' + encodeURIComponent((st.searchQuery || '').trim()),
       searchAllLabel: 'See all results',
       searchHasResults: this.searchHits().length > 0,
       searchEmpty: !!(st.searchQuery || '').trim() && this.searchHits().length === 0,
-      searchEmptyText: this._searchIndex ? 'Nothing found — try another spelling or a category name.' : 'Loading…',
-      menuCats: flat.map(c => ({
-        label: c.name, count: all(c) || '',
-        href: all(c) >= MIN_PUBLISH ? c.slug + '.html' : undefined,
-        color: '#1a1a1a',
+      searchEmptyText: st.index ? 'Nothing found — try another spelling or a category name.' : 'Loading…',
+
+      // страница результатов
+      qRef: n => { this._q = n; if (n && !n.value && URL_Q) n.value = URL_Q; },
+      onQuery: e => this.setQuery(e.target.value),
+      hasQuery: !!q,
+      onClear: () => { if (this._q) this._q.value = ''; this.setQuery(''); },
+      summary: !st.index ? 'Loading the directory…'
+        : !q ? 'Type to search 1,710 verified listings across Cebu.'
+        : hits.length ? hits.length.toLocaleString('en-US') + ' result' + (hits.length === 1 ? '' : 's')
+          + ' for “' + q + '”' + (st.area === 'All Cebu' ? '' : ' in ' + st.area)
+        : 'No results for “' + q + '”' + (st.area === 'All Cebu' ? '' : ' in ' + st.area),
+      resultsL: cards.filter((_, i) => i % 2 === 0),
+      resultsR: cards.filter((_, i) => i % 2 === 1),
+      hasFacets: facets.length > 1,
+      facets: facets.map(f => {
+        const active = st.cat === f.key;
+        return { label: f.label, count: f.n,
+          border: active ? '#6342D2' : '#eee', bg: active ? '#6342D2' : '#fff',
+          color: active ? '#fff' : '#1a1a1a',
+          countBg: active ? 'rgba(255,255,255,0.25)' : '#F2F2F5',
+          countColor: active ? '#fff' : '#6B6B7A',
+          onClick: () => this.setState({ cat: f.key, shown: PAGE }) };
+      }),
+      hasMore: hits.length > st.shown,
+      moreLabel: 'Show more (' + Math.max(0, hits.length - st.shown) + ')',
+      onMore: () => this.setState(s => ({ shown: s.shown + PAGE })),
+      isEmpty: !!st.index && (!q || hits.length === 0),
+      emptyText: q ? 'Nothing matched. Try a category name or a nearby area.' : 'Popular searches:',
+      suggestions: SUGGESTIONS.map(s => ({ label: s,
+        onClick: () => { if (this._q) this._q.value = s; this.setQuery(s); } })),
+
+      areas: AREAS.map((a, i) => ({ label: a, sep: i > 0,
+        weight: st.area === a ? '700' : '400',
+        underline: st.area === a ? 'underline' : 'none',
+        onClick: () => this.setState({ area: a, shown: PAGE }) })),
+
+      // меню
+      categories: flat.map(c => ({
+        label: c.name, count: '',
+        href: all(c) >= MIN_PUBLISH ? ASSET_PREFIX + c.slug + '.html' : undefined,
+        color: '#1a1a1a', weight: '500',
         bg: st.menuCat === c.slug ? '#F7F7F7' : 'transparent',
-        onHover: () => this.setState({ menuCat: c.slug }),
-      })),
+        onHover: () => this.setState({ menuCat: c.slug }) })),
       menuCatLabel: cur.name || '',
-      menuSubs: (cur.subs || []).map(s => ({
-        label: s.name,
-        href: all(s) >= MIN_PUBLISH ? 'directory/' + s.slug + '.html' : undefined,
-        color: '#1a1a1a',
-      })),
-      areaChips: AREAS.map((a, i) => ({
-        name: a, sep: i > 0,
-        href: 'directory.html' + (a === 'All Cebu' ? '' : '?area=' + a.toLowerCase().replace(/\s+/g, '-')),
-      })),
-      // Иконки — простые геометрические фигуры в цветах бренда.
+      menuSubs: (cur.subs || []).map(s => ({ label: s.name,
+        href: all(s) >= MIN_PUBLISH ? ASSET_PREFIX + 'directory/' + s.slug + '.html' : undefined,
+        color: '#1a1a1a' })),
+      menuOpen: st.menuOpen,
+      onMenuOpen: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
+      onMenuClose: () => { clearTimeout(this._menuTimer); this._menuTimer = setTimeout(() => this.setState({ menuOpen: false }), 320); },
+      onMenuToggle: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      burgerOpen: st.burgerOpen,
+      onBurger: () => this.setState(s => ({ burgerOpen: !s.burgerOpen })),
+      langOpen: st.langOpen,
+      onLangOpen: () => { clearTimeout(this._langTimer); this.setState({ langOpen: true }); },
+      onLangClose: () => { clearTimeout(this._langTimer); this._langTimer = setTimeout(() => this.setState({ langOpen: false }), 260); },
+
       tabs: TABS.map(label => ({
         label,
         href: ASSET_PREFIX + (label === 'Home' ? 'index.html' : label.toLowerCase() + '.html'),
@@ -330,18 +496,6 @@ class Component extends DCLogic {
           style: { display: 'block', width: '22px', height: '22px' },
         }),
       })),
-      menuOpen: st.menuOpen,
-      onMenuOpen: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
-      onMenuClose: () => {
-        clearTimeout(this._menuTimer);
-        this._menuTimer = setTimeout(() => this.setState({ menuOpen: false }), 320);
-      },
-      onMenuToggle: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
-      burgerOpen: st.burgerOpen,
-      onBurger: () => this.setState(s => ({ burgerOpen: !s.burgerOpen })),
-      langOpen: st.langOpen,
-      onLangOpen: () => { clearTimeout(this._langTimer); this.setState({ langOpen: true }); },
-      onLangClose: () => { clearTimeout(this._langTimer); this._langTimer = setTimeout(() => this.setState({ langOpen: false }), 260); },
     };
   }
 }

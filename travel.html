@@ -34,8 +34,11 @@
   }
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  body { margin:0; background:#fff; font-family:'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+  body { margin:0; background:#fff; font-family:'Avenir Next', Avenir, Mulish, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing:antialiased; }
   a { color:#6342D2; text-decoration:none; }
   a:hover { color:#4D33A4; }
   [data-r="burger"], [data-r="tabbar"] { display:none; }
@@ -45,7 +48,9 @@
     [data-r="nav"] { display:none !important; }
     [data-r="lang"] { display:none !important; }
     [data-r="burger"] { display:flex !important; }
-    [data-r="hero"] { padding:36px 20px !important; }
+    [data-r="hero"] { padding:36px 20px !important; background-position:left bottom !important; background-size:180% auto !important; }
+    [data-r="hero-cta"] { flex-wrap:nowrap !important; gap:8px !important; }
+    [data-r="hero-cta"] > a { flex:0 1 auto !important; min-width:0 !important; max-width:184px !important; box-sizing:border-box !important; padding:11px 12px !important; font-size:13.5px !important; text-align:center !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
     [data-r="hero-h1"] { font-size:30px !important; }
     [data-r="hero-sub"] { font-size:18px !important; }
     [data-r="regionrow"] { flex-wrap:nowrap !important; justify-content:flex-start !important; overflow-x:auto !important; padding:14px 16px !important; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
@@ -60,7 +65,7 @@
   }
 </style>
 </helmet>
-<div data-r="page" style="background:#fff;color:#1a1a1a;font-family:'Helvetica Neue', Arial, sans-serif;">
+<div data-r="page" style="background:#fff;color:#1a1a1a;font-family:'Avenir Next', Avenir, Mulish, 'Helvetica Neue', Arial, sans-serif;">
   <svg width="0" height="0" style="position:absolute;" aria-hidden="true"><defs>
     <linearGradient id="cq" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0%" stop-color="#8FC7EE"></stop>
@@ -75,10 +80,13 @@
   <div style="position:sticky;top:0;z-index:1200;background:#fff;">
     <div style="border-bottom:1px solid #eee;">
       <div data-r="header" style="position:relative;max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:26px;">
-        <a href="index.html" style="display:inline-flex;flex-shrink:0;"><img src="assets/cebuq-logo.png" alt="CEBUQ" style="height:41px;display:block;"></a>
+        <a href="index.html" style="display:inline-flex;flex-shrink:0;"><picture>
+          <source media="(max-width: 700px)" srcset="assets/cebuq-logo-mobile.png">
+          <img src="assets/cebuq-logo.png" alt="CEBUQ Business Directory" style="height:38px;max-width:100%;display:block;">
+        </picture></a>
         <nav data-r="nav" style="display:flex;align-items:center;gap:22px;font-size:15px;margin-left:auto;flex-shrink:0;">
           <span onMouseEnter="{{ onMenuOpen }}" onMouseLeave="{{ onMenuClose }}" style="padding-bottom:14px;margin-bottom:-14px;">
-            <a href="directory.html" style="color:#1a1a1a;">Directory ▾</a>
+            <a href="directory.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Directory ▾</a>
             <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
               <span data-r="menu" style="position:absolute;top:100%;right:24px;display:grid;grid-template-columns:460px 270px;width:760px;max-width:calc(100vw - 32px);background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:10px;z-index:10;">
                 <span data-r="menucols" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10, auto);grid-auto-flow:column;border-right:1px solid #F0F0F2;padding-right:8px;">
@@ -95,9 +103,14 @@
               </span>
             </sc-if>
           </span>
-          <a href="guide.html" style="color:#1a1a1a;">Guide</a>
+          <a href="guide.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Guide</a>
           <span style="color:#1a1a1a;font-weight:700;">Travel</span>
-          <a href="business.html" style="color:#1a1a1a;">Business</a>
+          <a href="business.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Business</a>
+          <span onClick="{{ onSearchOpen }}" title="Search" style="display:inline-flex;align-items:center;cursor:pointer;color:#1a1a1a;" style-hover="color:#6342D2;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="display:block;">
+              <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
+            </svg>
+          </span>
         </nav>
         <span data-r="lang" onMouseEnter="{{ onLangOpen }}" onMouseLeave="{{ onLangClose }}" style="position:relative;margin-left:auto;display:inline-flex;align-items:center;white-space:nowrap;font-size:14px;padding-bottom:14px;margin-bottom:-14px;">
           <span style="cursor:pointer;color:#1a1a1a;font-weight:700;">EN <span style="font-weight:400;">▾</span></span>
@@ -111,8 +124,8 @@
             </span>
           </sc-if>
         </span>
-        <span data-r="burger" onClick="{{ onBurger }}" style="margin-left:auto;position:relative;width:46px;height:46px;align-items:center;justify-content:center;cursor:pointer;color:#6342D2;">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true" style="display:block;">
+        <span data-r="burger" onClick="{{ onBurger }}" style="margin-left:auto;position:relative;width:38px;height:38px;align-items:center;justify-content:center;cursor:pointer;color:#6342D2;">
+          <svg width="23" height="23" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true" style="display:block;">
             <rect x="2" y="2" width="5" height="5" rx="1"></rect><rect x="10.5" y="2" width="5" height="5" rx="1"></rect><rect x="19" y="2" width="5" height="5" rx="1"></rect>
             <rect x="2" y="10.5" width="5" height="5" rx="1"></rect><rect x="10.5" y="10.5" width="5" height="5" rx="1"></rect><rect x="19" y="10.5" width="5" height="5" rx="1"></rect>
             <rect x="2" y="19" width="5" height="5" rx="1"></rect><rect x="10.5" y="19" width="5" height="5" rx="1"></rect><rect x="19" y="19" width="5" height="5" rx="1"></rect>
@@ -127,7 +140,14 @@
               <span style="padding:9px 12px;font-size:15px;"><strong style="font-weight:700;color:#1a1a1a;">EN</strong> <span style="color:#C9C6BE;">· RU · DE · FR · IT</span></span>
               <a href="guide.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Guide</a>
               <a href="travel.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Travel</a>
+              <a href="https://tours.cebuq.com" target="_blank" rel="noreferrer" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Tours</a>
               <a href="business.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Business</a>
+              <span onClick="{{ onSearchOpen }}" style="display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;cursor:pointer;" style-hover="background:#F7F7F7;color:#6342D2;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;">
+                  <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
+                </svg>
+                Search
+              </span>
             </span>
           </sc-if>
         </span>
@@ -136,8 +156,9 @@
   </div>
 
 
-  <div style="background:#4DD0C7;">
-  <div data-r="hero" style="box-sizing:border-box;max-width:1000px;margin:0 auto;position:relative;overflow:hidden;background:#4DD0C7;color:#fff;padding:56px 20px;">
+  <div style="background:#1CDCDC;">
+  <div data-r="hero" style="box-sizing:border-box;max-width:1000px;margin:0 auto;position:relative;overflow:hidden;background:#1CDCDC url('assets/hero-travel.png') right center / cover no-repeat;color:#fff;padding:56px 20px;">
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg, rgba(28,220,220,0.96) 0%, rgba(28,220,220,0.86) 34%, rgba(28,220,220,0.55) 52%, rgba(28,220,220,0) 70%);"></div>
     <div style="position:relative;z-index:2;max-width:560px;">
       <h1 data-r="hero-h1" style="margin:0 0 20px;font-size:44px;font-weight:800;line-height:1.15;">Tours and trips across Cebu <span style="font-weight:400;">— planned by locals, built around you.</span></h1>
       <p data-r="hero-sub" style="margin:0 0 16px;font-size:22px;font-weight:700;color:#6342D2;">For visitors and residents.</p>
@@ -161,9 +182,9 @@
     <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#B9B9C2;">Travel</div>
     <h2 style="margin:12px 0 10px;font-size:28px;font-weight:800;letter-spacing:-0.01em;">Under construction</h2>
     <p style="margin:0 auto;max-width:520px;font-size:16px;line-height:1.55;color:#8B8B9A;text-wrap:pretty;">This section is being built. In the meantime, browse the directory — 1,700+ places across Cebu, checked and rated.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
-      <a href="directory.html" style="font-size:15px;font-weight:600;color:#fff;background:#6342D2;border-radius:8px;padding:12px 24px;" style-hover="background:#4D33A4;color:#fff;">Browse the directory</a>
-      <a href="unlock.html" style="font-size:15px;font-weight:600;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:8px;padding:12px 24px;" style-hover="background:#F7F7F7;color:#1a1a1a;">Add your business</a>
+    <div data-r="hero-cta" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
+      <a href="directory.html" style="box-sizing:border-box;min-width:214px;text-align:center;font-size:15px;font-weight:600;color:#fff;background:#6342D2;border:1.5px solid #6342D2;border-radius:8px;padding:12px 24px;" style-hover="background:#4D33A4;color:#fff;">Browse the directory</a>
+      <a href="unlock.html" style="box-sizing:border-box;min-width:214px;text-align:center;font-size:15px;font-weight:600;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:8px;padding:12px 24px;" style-hover="background:#F7F7F7;color:#1a1a1a;">Add your business</a>
     </div>
   </div>
 
@@ -171,6 +192,7 @@
     <div data-r="footer" style="box-sizing:border-box;max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
       <a href="index.html" style="display:inline-flex;"><img src="assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
       <div style="font-size:13px;line-height:1.7;color:#B5B5B5;text-align:right;">
+        <div><a href="https://tours.cebuq.com/en" target="_blank" rel="noreferrer" style="color:#fff;font-weight:600;" style-hover="text-decoration:underline;">CEBUQ Travel &amp; Tours</a></div>
         <div>JDN Square IT Center, Banilad, Mandaue City 6014 Cebu</div>
         <div><a href="mailto:cebuq.plus@gmail.com?subject=CEBUQ%20%E2%80%94%20Add%20my%20business&body=Hi%20CEBUQ%20team%2C%20I%20would%20like%20to%20add%20my%20business%20to%20the%20directory.%0A%0ABusiness%20name%3A%0ACategory%20(e.g.%20Food%20%26%20Drink%20%2F%20Restaurants)%3A%0AArea%20(Cebu%20City%20%2F%20Mactan%20%2F%20Mandaue%20%2F%20Moalboal%20%2F%20Badian%20%2F%20Oslob)%3A%0AAddress%3A%0APhone%20%2F%20WhatsApp%3A%0AWebsite%20or%20Facebook%3A%0AGoogle%20Maps%20link%3A%0A%0AAnything%20else%20we%20should%20know%3A%0A" style="color:#fff;" style-hover="text-decoration:underline;">business@cebuq.com</a></div>
       </div>
@@ -178,28 +200,84 @@
   </div>
 
   <div data-r="tabbar" style="position:fixed;left:0;right:0;bottom:0;max-width:1000px;margin:0 auto;background:#6342D2;z-index:1300;">
-    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-      <a href="{{ t.href }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px calc(14px + env(safe-area-inset-bottom));min-height:46px;font-size:11px;font-weight:500;color:#fff;">
-        <span style="display:flex;align-items:center;justify-content:center;height:20px;line-height:1;font-size:{{ t.size }};">{{ t.icon }}</span>
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+      <a href="{{ t.href }}" style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 2px calc(14px + env(safe-area-inset-bottom));min-height:46px;font-size:10.5px;font-weight:500;color:#fff;white-space:nowrap;">
+        <span style="display:flex;align-items:center;justify-content:center;height:22px;">{{ t.icon }}</span>
         <span>{{ t.label }}</span>
       </a>
     </sc-for>
   </div>
+
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ onSearchClose }}" style="position:fixed;inset:0;background:rgba(16,16,22,0.5);z-index:2000;padding:16px;">
+      <div onClick="{{ onSearchStop }}" style="box-sizing:border-box;max-width:620px;margin:8vh auto 0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.3);">
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #eee;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#B9B9C2" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;">
+            <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
+          </svg>
+          <input ref="{{ searchRef }}" onInput="{{ onSearchInput }}" placeholder="Search businesses, categories, areas" style="flex:1;min-width:0;border:none;outline:none;font-size:16px;font-family:inherit;color:#1a1a1a;background:transparent;" />
+          <span onClick="{{ onSearchClose }}" style="cursor:pointer;font-size:20px;line-height:1;color:#B9B9C2;padding:0 2px;" style-hover="color:#1a1a1a;">×</span>
+        </div>
+        <div style="max-height:58vh;overflow-y:auto;">
+          <sc-if value="{{ searchHasResults }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;flex-direction:column;">
+              <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="6">
+                <a href="{{ r.href }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;border-bottom:1px solid #F4F4F6;color:#1a1a1a;" style-hover="background:#F7F7F7;">
+                  <span style="min-width:0;">
+                    <span style="display:block;font-size:14px;font-weight:600;color:{{ r.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
+                    <span style="display:block;margin-top:2px;font-size:12.5px;color:#8B8B9A;">{{ r.meta }}</span>
+                  </span>
+                  <span style="flex-shrink:0;font-size:12.5px;color:#B29DFB;">{{ r.rating }}</span>
+                </a>
+              </sc-for>
+            </span>
+          </sc-if>
+          <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:26px 16px;text-align:center;font-size:14px;color:#8B8B9A;">{{ searchEmptyText }}</div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ searchHasResults }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ searchAllHref }}" style="display:block;padding:13px 16px;border-top:1px solid #eee;text-align:center;font-size:14px;font-weight:600;color:#6342D2;background:#FCFCFD;" style-hover="background:#F4F4F6;">{{ searchAllLabel }}</a>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000}}">
-const TABS = [['Home','⌂','19px','index.html'], ['Directory','☰','19px','directory.html'],
-  ['Guide','◎','15px','guide.html'], ['Travel','⛟','16px','travel.html']];
+const ASSET_PREFIX = '';
+const TABS = ['Home','Directory','Guide','Travel','Business'];
 const MIN_PUBLISH = 5;
 const AREAS = ['All Cebu', 'Mactan', 'Cebu City', 'Mandaue City', 'Moalboal', 'Badian', 'Oslob'];
 
 class Component extends DCLogic {
-  state = { groups: [], menuOpen: false, menuCat: 'food-drink', burgerOpen: false };
+  state = { searchOpen:false, searchQuery:'', groups: [], menuOpen: false, menuCat: 'food-drink', burgerOpen: false };
 
   componentDidMount() {
     fetch('directory.json').then(r => r.json())
       .then(d => this.setState({ groups: d.groups }))
       .catch(() => {});
+  }
+
+  // ---- Поиск по всем листингам (индекс грузится при первом открытии) ----
+  openSearch() {
+    this.setState({ searchOpen: true, searchQuery: '', burgerOpen: false, menuOpen: false });
+    if (!this._searchIndex) {
+      fetch(ASSET_PREFIX + 'search-index.json').then(r => r.json())
+        .then(d => { this._searchIndex = d; this.forceUpdate(); })
+        .catch(() => { this._searchIndex = []; this.forceUpdate(); });
+    }
+    setTimeout(() => { if (this._searchInput) this._searchInput.focus(); }, 40);
+  }
+
+  searchHits() {
+    const q = (this.state.searchQuery || '').trim().toLowerCase();
+    if (!q || !this._searchIndex) return [];
+    const words = q.split(/\s+/);
+    return this._searchIndex.filter(it => {
+      const hay = (it.n + ' ' + it.s + ' ' + it.a).toLowerCase();
+      return words.every(w => hay.indexOf(w) >= 0);
+    }).slice(0, 30);
   }
 
   renderVals() {
@@ -208,6 +286,24 @@ class Component extends DCLogic {
     const all = o => (o.byArea || {})['All Cebu'] || 0;
     const cur = flat.find(c => c.slug === st.menuCat) || {};
     return {
+      searchOpen: st.searchOpen,
+      onSearchOpen: () => this.openSearch(),
+      onSearchClose: () => this.setState({ searchOpen: false }),
+      onSearchStop: e => e.stopPropagation(),
+      onSearchInput: e => this.setState({ searchQuery: e.target.value }),
+      searchRef: n => { this._searchInput = n; },
+      searchResults: this.searchHits().map(it => ({
+        name: it.n,
+        nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
+        meta: [it.s, it.a].filter(Boolean).join(' · '),
+        rating: it.r ? '★ ' + it.r : '',
+        href: ASSET_PREFIX + it.u,
+      })),
+      searchAllHref: ASSET_PREFIX + 'search.html?q=' + encodeURIComponent((st.searchQuery || '').trim()),
+      searchAllLabel: 'See all results',
+      searchHasResults: this.searchHits().length > 0,
+      searchEmpty: !!(st.searchQuery || '').trim() && this.searchHits().length === 0,
+      searchEmptyText: this._searchIndex ? 'Nothing found — try another spelling or a category name.' : 'Loading…',
       menuCats: flat.map(c => ({
         label: c.name, count: all(c) || '',
         href: all(c) >= MIN_PUBLISH ? c.slug + '.html' : undefined,
@@ -226,18 +322,15 @@ class Component extends DCLogic {
         href: 'directory.html' + (a === 'All Cebu' ? '' : '?area=' + a.toLowerCase().replace(/\s+/g, '-')),
       })),
       // Иконки — простые геометрические фигуры в цветах бренда.
-      tabs: TABS.map(([label, icon, size, href]) => {
-        const el = React.createElement;
-        const svg = (w, h, kids) => el('svg', { width: 20, height: 20, viewBox: '0 0 20 20',
-          style: { display: 'block' }, 'aria-hidden': 'true' }, kids);
-        const shape = {
-          Home: svg(20, 20, el('path', { d: 'M10 3.5 L17.5 16.5 H2.5 Z', fill: '#ffffff' })),
-          Directory: svg(20, 20, el('rect', { x: 1, y: 4.5, width: 18, height: 11, rx: 2, fill: '#B29DFB' })),
-          Guide: svg(20, 20, el('circle', { cx: 10, cy: 10, r: 6.5, fill: '#FFE606' })),
-          Travel: svg(20, 20, el('rect', { x: 3.5, y: 3.5, width: 13, height: 13, rx: 1.5, fill: '#73FDEA' })),
-        };
-        return { label, size, href, icon: shape[label] || icon };
-      }),
+      tabs: TABS.map(label => ({
+        label,
+        href: ASSET_PREFIX + (label === 'Home' ? 'index.html' : label.toLowerCase() + '.html'),
+        icon: React.createElement('img', {
+          src: ASSET_PREFIX + 'assets/tab-' + label.toLowerCase() + '.png',
+          alt: '', width: 22, height: 22, loading: 'lazy',
+          style: { display: 'block', width: '22px', height: '22px' },
+        }),
+      })),
       menuOpen: st.menuOpen,
       onMenuOpen: () => { clearTimeout(this._menuTimer); this.setState({ menuOpen: true }); },
       onMenuClose: () => {
