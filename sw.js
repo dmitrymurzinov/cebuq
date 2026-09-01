@@ -1,5 +1,5 @@
 // CEBUQ service worker — offline shell + cache-first assets
-const VERSION = 'cebuq-v4';
+const VERSION = 'cebuq-v5';
 const SHELL = [
   '/',
   '/manifest.json',
