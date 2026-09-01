@@ -89,13 +89,13 @@
               <span data-r="menu" style="position:absolute;top:100%;right:24px;display:grid;grid-template-columns:460px 270px;width:760px;max-width:calc(100vw - 32px);background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:10px;z-index:10;">
                 <span data-r="menucols" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10, auto);grid-auto-flow:column;border-right:1px solid #F0F0F2;padding-right:8px;">
                   <sc-for list="{{ menuCats }}" as="c" hint-placeholder-count="20">
-                    <a href="{{ c.href }}" onMouseEnter="{{ c.onHover }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;font-size:14px;font-weight:500;color:{{ c.color }};background:{{ c.bg }};border-radius:6px;white-space:nowrap;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
+                    <a href="{{ c.href }}" onMouseEnter="{{ c.onHover }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;font-size:14px;font-weight:500;color:{{ c.color }};background:{{ c.bg }};border-radius:6px;white-space:nowrap;" style-hover="background:#F2F2F7;color:#6342D2;">{{ c.label }}</a>
                   </sc-for>
                 </span>
                 <span style="display:flex;flex-direction:column;padding:2px 4px 2px 14px;">
                   <span style="padding:5px 8px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#B9B9C2;">{{ menuCatLabel }}</span>
                   <sc-for list="{{ menuSubs }}" as="s" hint-placeholder-count="5">
-                    <a href="{{ s.href }}" style="padding:7px 10px;font-size:14px;color:{{ s.color }};border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">{{ s.label }}</a>
+                    <a href="{{ s.href }}" style="padding:7px 10px;font-size:14px;color:{{ s.color }};border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">{{ s.label }}</a>
                   </sc-for>
                 </span>
               </span>
@@ -114,7 +114,7 @@
           <span style="cursor:pointer;color:#1a1a1a;font-weight:700;">EN <span style="font-weight:400;">▾</span></span>
           <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;top:100%;right:0;display:flex;flex-direction:column;min-width:150px;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:6px;z-index:20;">
-              <span style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;font-weight:700;color:#6342D2;border-radius:6px;background:#F7F7F7;">English<span style="font-size:12px;">EN</span></span>
+              <span style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;font-weight:700;color:#6342D2;border-radius:6px;background:#F2F2F7;">English<span style="font-size:12px;">EN</span></span>
               <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Русский<span style="font-size:12px;">RU</span></span>
               <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Deutsch<span style="font-size:12px;">DE</span></span>
               <span title="Coming soon" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 10px;font-size:14px;color:#C9C6BE;cursor:default;">Français<span style="font-size:12px;">FR</span></span>
@@ -131,16 +131,16 @@
           <sc-if value="{{ burgerOpen }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;top:calc(100% + 10px);right:0;display:flex;flex-direction:column;width:262px;max-height:70vh;overflow-y:auto;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.16);padding:8px;z-index:1400;">
               <sc-for list="{{ menuCats }}" as="c" hint-placeholder-count="20">
-                <a href="{{ c.href }}" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">{{ c.label }}</a>
+                <a href="{{ c.href }}" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">{{ c.label }}</a>
               </sc-for>
               <span style="height:1px;background:#eee;margin:6px 8px;"></span>
-              <a href="directory.html" style="padding:9px 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">All categories</a>
+              <a href="directory.html" style="padding:9px 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">All categories</a>
               <span style="padding:9px 12px;font-size:15px;"><strong style="font-weight:700;color:#1a1a1a;">EN</strong> <span style="color:#C9C6BE;">· RU · DE · FR · IT</span></span>
-              <a href="guide.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Guide</a>
-              <a href="travel.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Travel</a>
-              <a href="https://tours.cebuq.com" target="_blank" rel="noreferrer" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Tours</a>
-              <a href="business.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F7F7F7;color:#6342D2;">Business</a>
-              <span onClick="{{ onSearchOpen }}" style="display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;cursor:pointer;" style-hover="background:#F7F7F7;color:#6342D2;">
+              <a href="guide.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Guide</a>
+              <a href="travel.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Travel</a>
+              <a href="https://tours.cebuq.com" target="_blank" rel="noreferrer" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Tours</a>
+              <a href="business.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Business</a>
+              <span onClick="{{ onSearchOpen }}" style="display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;cursor:pointer;" style-hover="background:#F2F2F7;color:#6342D2;">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;">
                   <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
                 </svg>
@@ -154,7 +154,7 @@
   </div>
 
 
-  <div data-r="regions" style="background:#ECECEC;">
+  <div data-r="regions" style="background:#F2F2F7;">
     <div data-r="regionrow" style="padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-size:14px;">
       <sc-for list="{{ areaChips }}" as="a" hint-placeholder-count="7">
         <span style="display:flex;align-items:center;gap:14px;">
@@ -167,7 +167,7 @@
 
   <div data-r="hero" style="padding:56px 24px 40px;text-align:center;">
     <h1 data-r="hero-h1" style="margin:0 0 12px;font-size:36px;font-weight:800;letter-spacing:-0.01em;">Choose a level for your business</h1>
-    <p style="margin:0 auto;max-width:560px;font-size:17px;line-height:1.5;color:#8B8B9A;text-wrap:pretty;">A free listing is available to everyone. Verification builds visitor trust and drives more customers.</p>
+    <p style="margin:0 auto;max-width:560px;font-size:17px;line-height:1.5;color:#8E8E93;text-wrap:pretty;">A free listing is available to everyone. Verification builds visitor trust and drives more customers.</p>
   </div>
 
   <div data-r="plans" style="box-sizing:border-box;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;padding:0 24px 56px;">
@@ -177,15 +177,15 @@
         <div style="font-size:13px;font-weight:700;color:#C9C6BE;letter-spacing:0.04em;">Verified</div>
       </div>
       <div style="font-size:28px;font-weight:800;margin:6px 0 4px;">Free</div>
-      <div style="color:#8B8B9A;font-size:14px;margin-bottom:24px;">Basic listing in the directory — for businesses rated 4.0+ on Google</div>
+      <div style="color:#8E8E93;font-size:14px;margin-bottom:24px;">Basic listing in the directory — for businesses rated 4.0+ on Google</div>
       <sc-for list="{{ freeFeatures }}" as="f" hint-placeholder-count="4">
         <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;">
-          <span style="color:#8B8B9A;font-size:15px;line-height:1.5;">✓</span>
+          <span style="color:#8E8E93;font-size:15px;line-height:1.5;">✓</span>
           <span style="font-size:14px;color:#1a1a1a;line-height:1.5;">{{ f }}</span>
         </div>
       </sc-for>
       <div style="flex:1;"></div>
-      <a href="mailto:cebuq.plus@gmail.com?subject=CEBUQ%20%E2%80%94%20Free%20listing&body=Hi%20CEBUQ%20team%2C%20I%20would%20like%20a%20free%20listing%20for%20my%20business.%0A%0ABusiness%20name%3A%0ACategory%20(e.g.%20Food%20%26%20Drink%20%2F%20Restaurants)%3A%0AArea%20(Cebu%20City%20%2F%20Mactan%20%2F%20Mandaue%20%2F%20Moalboal%20%2F%20Badian%20%2F%20Oslob)%3A%0AAddress%3A%0APhone%20%2F%20WhatsApp%3A%0AWebsite%20or%20Facebook%3A%0AGoogle%20Maps%20link%3A%0A%0AAnything%20else%20we%20should%20know%3A%0A" style="margin-top:16px;text-align:center;background:#fff;border:1.5px solid #1a1a1a;border-radius:8px;padding:12px 20px;font-size:15px;font-weight:600;color:#1a1a1a;" style-hover="background:#F7F7F7;color:#1a1a1a;">Add your business</a>
+      <a href="mailto:cebuq.plus@gmail.com?subject=CEBUQ%20%E2%80%94%20Free%20listing&body=Hi%20CEBUQ%20team%2C%20I%20would%20like%20a%20free%20listing%20for%20my%20business.%0A%0ABusiness%20name%3A%0ACategory%20(e.g.%20Food%20%26%20Drink%20%2F%20Restaurants)%3A%0AArea%20(Cebu%20City%20%2F%20Mactan%20%2F%20Mandaue%20%2F%20Moalboal%20%2F%20Badian%20%2F%20Oslob)%3A%0AAddress%3A%0APhone%20%2F%20WhatsApp%3A%0AWebsite%20or%20Facebook%3A%0AGoogle%20Maps%20link%3A%0A%0AAnything%20else%20we%20should%20know%3A%0A" style="margin-top:16px;text-align:center;background:#fff;border:1.5px solid #1a1a1a;border-radius:8px;padding:12px 20px;font-size:15px;font-weight:600;color:#1a1a1a;" style-hover="background:#F2F2F7;color:#1a1a1a;">Add your business</a>
     </div>
 
     <div style="border:1px solid #B29DFB;background:#fff;border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;">
@@ -194,7 +194,7 @@
         <div style="font-size:13px;font-weight:700;color:#B29DFB;letter-spacing:0.04em;">Verified</div>
       </div>
       <div style="font-size:28px;font-weight:800;margin:6px 0 4px;">{{ verifiedPrice }}*</div>
-      <div style="color:#8B8B9A;font-size:14px;margin-bottom:24px;">Verified in person by CEBUQ</div>
+      <div style="color:#8E8E93;font-size:14px;margin-bottom:24px;">Verified in person by CEBUQ</div>
       <sc-for list="{{ verifiedFeatures }}" as="f" hint-placeholder-count="8">
         <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;">
           <span style="color:#B29DFB;font-size:15px;line-height:1.5;">✓</span>
@@ -216,7 +216,7 @@
         <span style="font-size:28px;font-weight:800;">{{ businessPrice }}*</span>
         <span style="background:#6342D2;color:#fff;font-size:11px;font-weight:700;letter-spacing:0.03em;padding:3px 9px;border-radius:20px;white-space:nowrap;">−50%</span>
       </div>
-      <div style="color:#8B8B9A;font-size:14px;margin-bottom:24px;">Maximum visibility and direct customer contact. Launch offer — 50% off the first year.</div>
+      <div style="color:#8E8E93;font-size:14px;margin-bottom:24px;">Maximum visibility and direct customer contact. Launch offer — 50% off the first year.</div>
       <sc-for list="{{ businessFeatures }}" as="f" hint-placeholder-count="9">
         <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;">
           <span style="color:#6342D2;font-size:15px;line-height:1.5;">✓</span>
@@ -228,13 +228,13 @@
     </div>
   </div>
 
-  <div style="text-align:center;padding:0 24px 40px;color:#8B8B9A;font-size:13px;">{{ priceNote }}</div>
+  <div style="text-align:center;padding:0 24px 40px;color:#8E8E93;font-size:13px;">{{ priceNote }}</div>
 
-  <div style="background:#F7F7F7;padding:18px 24px;text-align:center;font-size:15px;">
+  <div style="background:#F2F2F7;padding:18px 24px;text-align:center;font-size:15px;">
     {{ scarcityLine }} <a href="mailto:cebuq.plus@gmail.com?subject=CEBUQ%20%E2%80%94%20Add%20my%20business&body=Hi%20CEBUQ%20team%2C%20I%20would%20like%20to%20add%20my%20business%20to%20the%20directory.%0A%0ABusiness%20name%3A%0ACategory%20(e.g.%20Food%20%26%20Drink%20%2F%20Restaurants)%3A%0AArea%20(Cebu%20City%20%2F%20Mactan%20%2F%20Mandaue%20%2F%20Moalboal%20%2F%20Badian%20%2F%20Oslob)%3A%0AAddress%3A%0APhone%20%2F%20WhatsApp%3A%0AWebsite%20or%20Facebook%3A%0AGoogle%20Maps%20link%3A%0A%0AAnything%20else%20we%20should%20know%3A%0A" style="font-weight:700;text-decoration:underline;color:#1a1a1a;">Reserve yours</a>
   </div>
 
-  <div style="background:#0E0E0E;color:#fff;">
+  <div style="background:#111111;color:#fff;">
     <div data-r="footer" style="box-sizing:border-box;max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
       <a href="index.html" style="display:inline-flex;"><img src="assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
       <div style="font-size:13px;line-height:1.7;color:#B5B5B5;text-align:right;">
@@ -268,10 +268,10 @@
           <sc-if value="{{ searchHasResults }}" hint-placeholder-val="{{ false }}">
             <span style="display:flex;flex-direction:column;">
               <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="6">
-                <a href="{{ r.href }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;border-bottom:1px solid #F4F4F6;color:#1a1a1a;" style-hover="background:#F7F7F7;">
+                <a href="{{ r.href }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;border-bottom:1px solid #F4F4F6;color:#1a1a1a;" style-hover="background:#F2F2F7;">
                   <span style="min-width:0;">
                     <span style="display:block;font-size:14px;font-weight:600;color:{{ r.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
-                    <span style="display:block;margin-top:2px;font-size:12.5px;color:#8B8B9A;">{{ r.meta }}</span>
+                    <span style="display:block;margin-top:2px;font-size:12.5px;color:#8E8E93;">{{ r.meta }}</span>
                   </span>
                   <span style="flex-shrink:0;font-size:12.5px;color:#B29DFB;">{{ r.rating }}</span>
                 </a>
@@ -279,7 +279,7 @@
             </span>
           </sc-if>
           <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
-            <div style="padding:26px 16px;text-align:center;font-size:14px;color:#8B8B9A;">{{ searchEmptyText }}</div>
+            <div style="padding:26px 16px;text-align:center;font-size:14px;color:#8E8E93;">{{ searchEmptyText }}</div>
           </sc-if>
         </div>
         <sc-if value="{{ searchHasResults }}" hint-placeholder-val="{{ false }}">
@@ -386,7 +386,7 @@ class Component extends DCLogic {
         label: c.name, count: all(c) || '',
         href: all(c) >= MIN_PUBLISH ? c.slug + '.html' : undefined,
         color: '#1a1a1a',
-        bg: st.menuCat === c.slug ? '#F7F7F7' : 'transparent',
+        bg: st.menuCat === c.slug ? '#F2F2F7' : 'transparent',
         onHover: () => this.setState({ menuCat: c.slug }),
       })),
       menuCatLabel: cur.name || '',
