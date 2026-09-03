@@ -87,18 +87,18 @@
     <div style="display:none;background:#FCD116;">
       <div style="max-width:1000px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:center;gap:20px;">
         <span style="font-size:17px;font-weight:500;">Cebu Business Directory</span>
-        <a href="../unlock.html" style="font-size:13px;font-weight:500;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:6px;padding:10px 20px;">Add your business</a>
+        <a href="../unlock" style="font-size:13px;font-weight:500;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:6px;padding:10px 20px;">Add your business</a>
       </div>
     </div>
     <div style="border-bottom:1px solid #eee;">
       <div data-r="header" style="position:relative;max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:26px;">
-        <a href="../index.html" style="display:inline-flex;flex-shrink:0;"><picture>
+        <a href=".." style="display:inline-flex;flex-shrink:0;"><picture>
           <source media="(max-width: 700px)" srcset="assets/cebuq-logo-mobile.png">
           <img src="../assets/cebuq-logo.png" alt="CEBUQ Business Directory" style="height:38px;max-width:100%;display:block;">
         </picture></a>
         <nav data-r="nav" style="display:flex;align-items:center;gap:22px;font-size:15px;margin-left:auto;flex-shrink:0;">
           <span onMouseEnter="{{ onMenuOpen }}" onMouseLeave="{{ onMenuClose }}" style="padding-bottom:14px;margin-bottom:-14px;">
-            <a href="../directory.html" style="color:#1a1a1a;font-weight:700;">Directory ▾</a>
+            <a href="../directory" style="color:#1a1a1a;font-weight:700;">Directory ▾</a>
             <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
               <span data-r="menu" style="position:absolute;top:100%;right:24px;display:grid;grid-template-columns:460px 270px;width:760px;max-width:calc(100vw - 32px);background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,0.12);padding:10px;z-index:10;">
                 <span data-r="menucols" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(10, auto);grid-auto-flow:column;border-right:1px solid #F0F0F2;padding-right:8px;">
@@ -115,9 +115,9 @@
               </span>
             </sc-if>
           </span>
-          <a href="../guide.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Guide</a>
-          <a href="../travel.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Travel</a>
-          <a href="../business.html" style="color:#1a1a1a;" style-hover="color:#6342D2;">Business</a>
+          <a href="../guide" style="color:#1a1a1a;" style-hover="color:#6342D2;">Guide</a>
+          <a href="../travel" style="color:#1a1a1a;" style-hover="color:#6342D2;">Travel</a>
+          <a href="../business" style="color:#1a1a1a;" style-hover="color:#6342D2;">Business</a>
           <span onClick="{{ onSearchOpen }}" title="Search" style="display:inline-flex;align-items:center;cursor:pointer;color:#1a1a1a;" style-hover="color:#6342D2;">
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="display:block;">
               <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
@@ -148,12 +148,12 @@
                 <a href="{{ c.href }}" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">{{ c.label }}</a>
               </sc-for>
               <span style="height:1px;background:#eee;margin:6px 8px;"></span>
-              <a href="../directory.html" style="padding:9px 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">All categories</a>
+              <a href="../directory" style="padding:9px 12px;font-size:15px;font-weight:700;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">All categories</a>
               <span style="padding:9px 12px;font-size:15px;"><strong style="font-weight:700;color:#1a1a1a;">EN</strong> <span style="color:#C9C6BE;">· RU · DE · FR · IT</span></span>
-              <a href="../guide.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Guide</a>
-              <a href="../travel.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Travel</a>
+              <a href="../guide" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Guide</a>
+              <a href="../travel" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Travel</a>
               <a href="https://tours.cebuq.com" target="_blank" rel="noreferrer" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Tours</a>
-              <a href="../business.html" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Business</a>
+              <a href="../business" style="padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;" style-hover="background:#F2F2F7;color:#6342D2;">Business</a>
               <span onClick="{{ onSearchOpen }}" style="display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:15px;font-weight:500;color:#1a1a1a;border-radius:6px;cursor:pointer;" style-hover="background:#F2F2F7;color:#6342D2;">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true" style="flex-shrink:0;">
                   <circle cx="10.5" cy="10.5" r="6.6"></circle><path d="M15.4 15.4 L21 21"></path>
@@ -236,7 +236,7 @@
                 <sc-if value="{{ b.isFree }}" hint-placeholder-val="{{ true }}">
                   <span style="display:flex;align-items:center;gap:6px;">
                     <span style="width:1px;height:13px;background:#D2CEC5;display:inline-block;"></span>
-                    <a href="../unlock.html" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
+                    <a href="../unlock" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
                   </span>
                 </sc-if>
               </div>
@@ -291,7 +291,7 @@
                 <sc-if value="{{ b.isFree }}" hint-placeholder-val="{{ true }}">
                   <span style="display:flex;align-items:center;gap:6px;">
                     <span style="width:1px;height:13px;background:#D2CEC5;display:inline-block;"></span>
-                    <a href="../unlock.html" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
+                    <a href="../unlock" style="font-size:13px;color:#5E44C9;" style-hover="text-decoration:underline;">Unlock</a>
                   </span>
                 </sc-if>
               </div>
@@ -354,7 +354,7 @@
 
   <div style="background:#111111;color:#fff;">
     <div data-r="footer" style="max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;">
-      <a href="../index.html" style="display:inline-flex;"><img src="../assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
+      <a href=".." style="display:inline-flex;"><img src="../assets/cebuq-logo-footer.png" alt="CEBUQ" style="height:56px;display:block;"></a>
       <div style="font-size:13px;line-height:1.7;color:#B5B5B5;text-align:right;">
         <div><a href="https://tours.cebuq.com/en" target="_blank" rel="noreferrer" style="color:#fff;font-weight:600;" style-hover="text-decoration:underline;">CEBUQ Travel &amp; Tours</a></div>
         <div>JDN Square IT Center, Banilad, Mandaue City 6014 Cebu</div>
@@ -657,24 +657,6 @@ class Component extends DCLogic {
         cursor: href ? 'pointer' : 'default'
       }));
       return {
-      searchOpen: st.searchOpen,
-      onSearchOpen: () => this.openSearch(),
-      onSearchClose: () => this.setState({ searchOpen: false }),
-      onSearchStop: e => e.stopPropagation(),
-      onSearchInput: e => this.setState({ searchQuery: e.target.value }),
-      searchRef: n => { this._searchInput = n; },
-      searchResults: this.searchHits().map(it => ({
-        name: it.n,
-        nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
-        meta: [it.s, it.a].filter(Boolean).join(' · '),
-        rating: it.r ? '★ ' + it.r : '',
-        href: ASSET_PREFIX + it.u,
-      })),
-      searchAllHref: ASSET_PREFIX + 'search.html?q=' + encodeURIComponent((st.searchQuery || '').trim()),
-      searchAllLabel: 'See all results',
-      searchHasResults: this.searchHits().length > 0,
-      searchEmpty: !!(st.searchQuery || '').trim() && this.searchHits().length === 0,
-      searchEmptyText: this._searchIndex ? 'Nothing found — try another spelling or a category name.' : 'Loading…',
         key: b.id, border: t.border, nameColor: t.nameColor, iconStroke: t.stroke,
         badge: t.badge, badgeColor: t.badgeColor, isFree: !paid, isBusiness: business,
         nameEl: business && b.website ? link(b.name, b.website, '#6342D2') : b.name,
@@ -713,6 +695,24 @@ class Component extends DCLogic {
     });
 
     return {
+      searchOpen: st.searchOpen,
+      onSearchOpen: () => this.openSearch(),
+      onSearchClose: () => this.setState({ searchOpen: false }),
+      onSearchStop: e => e.stopPropagation(),
+      onSearchInput: e => this.setState({ searchQuery: e.target.value }),
+      searchRef: n => { this._searchInput = n; },
+      searchResults: this.searchHits().map(it => ({
+        name: it.n,
+        nameColor: it.t === 0 ? '#6342D2' : '#1a1a1a',
+        meta: [it.s, it.a].filter(Boolean).join(' · '),
+        rating: it.r ? '★ ' + it.r : '',
+        href: ASSET_PREFIX + it.u,
+      })),
+      searchAllHref: ASSET_PREFIX + 'search?q=' + encodeURIComponent((st.searchQuery || '').trim()),
+      searchAllLabel: 'See all results',
+      searchHasResults: this.searchHits().length > 0,
+      searchEmpty: !!(st.searchQuery || '').trim() && this.searchHits().length === 0,
+      searchEmptyText: this._searchIndex ? 'Nothing found — try another spelling or a category name.' : 'Loading…',
       cardsL: cards.filter((_, i) => i % 2 === 0),
       cardsR: cards.filter((_, i) => i % 2 === 1),
       structuredData: this.jsonLd(page),
@@ -725,7 +725,7 @@ class Component extends DCLogic {
         const active = st.menuCat === slug;
         return {
           label, count: n || '',
-          href: n >= 5 ? '../' + slug + '.html' : undefined,
+          href: n >= 5 ? '../' + slug : undefined,
           color: slug === CURRENT_SLUG ? '#6342D2' : '#1a1a1a',
           weight: slug === CURRENT_SLUG ? '700' : '500',
           bg: active ? '#F2F2F7' : 'transparent',
@@ -735,13 +735,13 @@ class Component extends DCLogic {
       menuCatLabel: (CATEGORIES.find(c => c[0] === st.menuCat) || ['', ''])[1],
       menuSubs: ((st.dirCats.find(c => c.slug === st.menuCat) || {}).subs || []).map(s => ({
         label: s.name,
-        href: ((s.byArea || {})['All Cebu'] || 0) >= 5 ? s.slug + '.html' : undefined,
+        href: ((s.byArea || {})['All Cebu'] || 0) >= 5 ? s.slug : undefined,
         color: '#1a1a1a',
       })),
       // Иконки — простые геометрические фигуры в цветах бренда.
       tabs: TABS.map(label => ({
         label,
-        href: ASSET_PREFIX + (label === 'Home' ? 'index.html' : label.toLowerCase() + '.html'),
+        href: ASSET_PREFIX + (label === 'Home' ? '.' : label.toLowerCase()),
         icon: React.createElement('img', {
           src: ASSET_PREFIX + '../assets/tab-' + label.toLowerCase() + '.png',
           alt: '', width: 22, height: 22, loading: 'lazy',
@@ -788,7 +788,7 @@ class Component extends DCLogic {
         border: st.sub === 'All' ? '#6342D2' : '#eee',
         bg: st.sub === 'All' ? '#6342D2' : '#ffffff',
         color: st.sub === 'All' ? '#ffffff' : '#1a1a1a',
-        href: '../' + CURRENT_SLUG + '.html',
+        href: '../' + CURRENT_SLUG,
       },
       pills: st.subs.slice().sort((a, b) => (b === CURRENT_SUB) - (a === CURRENT_SUB)).map(s => {
         const active = st.sub === s;
@@ -799,7 +799,7 @@ class Component extends DCLogic {
           color: active ? '#ffffff' : '#1a1a1a',
           countBg: active ? 'rgba(255,255,255,0.25)' : '#F2F2F5',
           countColor: active ? '#ffffff' : '#6B6B7A',
-          href: SUB_SLUGS[s] ? SUB_SLUGS[s] + '.html' : undefined,
+          href: SUB_SLUGS[s] ? SUB_SLUGS[s] : undefined,
           onClick: SUB_SLUGS[s] ? undefined : (() => this.setState({ sub: s, shown: PAGE }))
         };
       })
